@@ -1,0 +1,73 @@
+
+fun main(){
+    /**
+     *
+     */
+
+//    val name = "labotal"
+//    //Int son numeros enteros
+//    val age:Int = 30
+//    var age2 = 29
+//    //Long son numeros largos
+//    val example:Long = 30
+//
+//    //float : Admite solo 6 decimales
+//    val floatExample:Float = 30.5f
+
+    // Double : soportan 14 decimales
+//    val doubleExample:Double = 3212.1111111
+//
+//    /** Variables Alfanumericas
+//     *
+//     */
+//    // Char : soporta un caracter
+//    val charExample1:Char = 'e'
+//    val charExample2:Char = '2'
+//    val charExaple:String = "!"
+//
+    // String
+    val stringExample:String = "LABOTAL "
+
+    /** Variables BOOLEANAS
+     *
+     */
+// Boolean : se refiere a verdadero o falso o 0y1
+    val booleanExample:Boolean = true
+    val booleanExample2:Boolean = false
+    val booleanExample3:Boolean = false
+
+    /** Ejercicios arigmeticos /
+     *
+//     */
+//
+////    println("SUMAR")
+////    println(age+age2)
+////
+////    println("RESTA")
+////    println(age-age2)
+////
+////    println("MULTIPLICACION")
+////    println(age*age2)
+////
+////    println("DIVISION")
+////    println(age/age2)
+////
+////    println("MODULO")
+////    println(age%age2)
+//
+//    fun variablesNumericas(){
+//
+
+
+//    }
+//}
+//fun main(){
+    showMyname("Hernan")
+    showMyage(29)
+}
+//
+//fun showMyname(name:String){
+//    println("Me llamo $name") }
+//
+//fun showMyage(currentAge:Int){
+//    println("Tengo 29 años")
