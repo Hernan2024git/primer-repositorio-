@@ -1,0 +1,1038 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Afiche y QR · Concurso Maule GPS</title>
+<script>
+/* =====================================================================
+   CONFIGURACIÓN DEL AFICHE
+   Cambia aquí los datos. Lo que va entre *asteriscos* sale destacado
+   (rojo en el titular, celeste en la bajada, rojo en el título del
+   concurso y en "APAGADO").
+   ===================================================================== */
+const CONFIG = {
+  negocio: 'Maule GPS',                          // la última palabra sale en rojo
+  instagram: 'maulegps',                         // sin @ · CONFÍRMALO antes de imprimir (sale en el afiche)
+  whatsapp: '56978038759',                       // solo números, con el 56 de Chile
+  telefonoTexto: '+56 9 7803 8759',              // cómo se lee el número en el afiche
+  urlConcurso: 'https://TU-SITIO.cl/concurso/',  // ← dirección pública de la página del concurso, con https:// (sin /admin/)
+  precio: '$3.990',
+  etiquetaPrecio: 'PLAN MENSUAL',
+  sorteo: '2026-10-18T20:00:00-03:00',           // se muestra como "domingo 18 de octubre"
+  titular: ['ENCUÉNTRALO,', 'APÁGALO', 'Y *RECUPÉRALO*.'],  // una línea por elemento; *así* sale en rojo
+  bajada: 'Rastreo GPS para tu auto, *desde tu celular*.',
+  caracteristicas: ['Apagado remoto', 'Ubicación en tiempo real', 'Alerta de movimiento', 'Historial de recorridos'],
+  tituloConcurso: ['GANA', 'LA INSTALACIÓN', 'DE TU GPS *GRATIS*'],
+  pasos: ['Escanea el código QR', 'Sigue a {instagram} en Instagram', 'Completa tus datos'],
+  leyendaQR: 'ESCANEA PARA PARTICIPAR',
+  // En la versión para historias de Instagram / estados de WhatsApp quien mira no puede escanear su propia pantalla
+  historia: { paso1: 'Toca el link de nuestra bio', leyendaQR: 'LINK EN LA BIO' },
+  telemetria: 'AUTO: *APAGADO*',
+  coordenadas: '',                               // opcional, ej. "35°25'S · 71°39'O" (vacío = no se muestra)
+  direccion: '4 Norte 1163 · Talca',
+  bases: 'Bases en {web}',                       // {web} = dirección del QR, corta (ej. maulegps.cl/concurso)
+};
+/* ===================================================================== */
+</script>
+<!-- Tipografías y colores de marca (copiados de ../marca.css, con las fuentes incrustadas para que funcione sin internet y con doble clic) -->
+<style id="marca">
+/*@@MARCA_CSS@@*/
+</style>
+<style>
+  /* Alias de los tokens de marca.css (con valor de respaldo) */
+  :root {
+    --fondo: var(--mg-fondo, #11161f);
+    --hondo: #0a0e15;
+    --panel: var(--mg-panel, #1d2331);
+    --texto: var(--mg-texto, #f2f4f8);
+    --gris: var(--mg-texto-2, #b5c0ce);
+    --gris-2: var(--mg-texto-3, #98a4b5);
+    --borde: var(--mg-borde, rgba(255, 255, 255, .10));
+    --cian: var(--mg-cian, #27c5e6);
+    --oro: var(--mg-oro, #ffdf8d);
+    --f-marca: var(--mg-f-marca, 'Audiowide', system-ui, sans-serif);
+    --f-texto: var(--mg-f-texto, 'Rajdhani', system-ui, sans-serif);
+  }
+  * { box-sizing: border-box; }
+  html { color-scheme: dark; }
+  body {
+    margin: 0; min-height: 100vh; color: var(--texto); background: var(--hondo);
+    font-family: var(--f-texto); font-weight: 500; font-size: 17px; line-height: 1.45;
+  }
+  [hidden] { display: none !important; }
+  button, input { font: inherit; }
+  :focus-visible { outline: 2px solid var(--cian); outline-offset: 3px; }
+
+  /* ---------- Página: panel + vista previa ---------- */
+  /* En el celular la vista previa queda entre la dirección y los botones, para ver al tiro el cambio del QR */
+  .app {
+    max-width: 1320px; margin: 0 auto; padding: 16px; display: grid; gap: 16px 24px; align-items: start;
+    grid-template-columns: minmax(0, 400px) minmax(0, 1fr); grid-template-rows: auto 1fr;
+    grid-template-areas: "url vista" "acciones vista";
+  }
+  .panel-url { grid-area: url; }
+  .panel-acciones { grid-area: acciones; }
+  @media (max-width: 860px) { .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; grid-template-areas: "url" "vista" "acciones"; } }
+
+  .panel {
+    background: var(--panel); border: 1px solid var(--borde); border-left: 3px solid var(--cian); border-radius: 14px;
+    padding: 18px 18px 20px; box-shadow: 0 14px 34px rgba(0, 0, 0, .3);
+  }
+  .panel h1 { font-family: var(--f-marca); font-weight: 400; font-size: 20px; letter-spacing: .06em; text-transform: uppercase; margin: 0 0 4px; }
+  .panel h1 span { color: var(--mg-rojo, #d23b2a); }
+  .panel > p { color: var(--gris); margin: 0 0 14px; }
+  .panel h2 { font-family: var(--f-marca); font-weight: 400; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: var(--cian); margin: 22px 0 8px; }
+  .panel h2:first-child { margin-top: 2px; }
+  .campo { display: block; font-weight: 700; color: var(--gris); margin-bottom: 6px; }
+  input[type=url] {
+    width: 100%; min-height: 48px; padding: 10px 12px; border-radius: 10px; font-size: 17px; font-weight: 600;
+    background: rgba(8, 11, 17, .72); border: 1px solid rgba(255, 255, 255, .16); color: var(--texto);
+  }
+  input[type=url]:focus { outline: 0; border-color: var(--cian); box-shadow: 0 0 0 3px rgba(39, 197, 230, .25); }
+  .check { display: flex; gap: 10px; align-items: flex-start; margin: 10px 0; font-size: 16px; font-weight: 600; color: var(--gris); cursor: pointer; }
+  .check input {
+    flex: none; width: 22px; height: 22px; margin: 1px 0 0; cursor: pointer; -webkit-appearance: none; appearance: none;
+    border: 1.5px solid rgba(39, 197, 230, .55); border-radius: 6px; background: rgba(8, 11, 17, .72) center / 15px 15px no-repeat;
+  }
+  .check input:checked {
+    border-color: var(--cian); background-color: var(--cian);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a1620' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+  }
+  .check b { color: var(--texto); }
+  .url-final { margin: 0 0 12px; padding: 8px 10px; border-radius: 8px; background: rgba(8, 11, 17, .72); font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; word-break: break-all; color: var(--cian); }
+  .url-final::before { content: "El QR abre: "; color: var(--gris-2); font-family: var(--f-texto); font-weight: 600; font-size: 15px; }
+  .aviso { margin: 0 0 12px; padding: 10px 12px; border-radius: 10px; background: rgba(255, 223, 141, .12); border: 1px solid rgba(255, 223, 141, .45); color: var(--oro); font-weight: 600; }
+  .aviso.ok { background: rgba(35, 204, 102, .1); border-color: rgba(35, 204, 102, .45); color: #7fe3a8; }
+  .btn {
+    display: block; width: 100%; margin-top: 10px; border: 0; border-radius: 10px; padding: 10px 16px; min-height: 48px; cursor: pointer;
+    font-weight: 700; font-size: 17px; letter-spacing: .02em; text-align: center; background: var(--cian); color: #0a1620;
+    transition: filter .15s, transform .1s;
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn:active { transform: scale(.98); }
+  .btn.sec { background: rgba(255, 255, 255, .04); color: var(--texto); border: 1px solid rgba(255, 255, 255, .2); }
+  .btn.sec:hover { border-color: rgba(39, 197, 230, .6); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; filter: none; transform: none; }
+  .nota { margin: 6px 0 0; font-size: 15px; color: var(--gris-2); }
+  .estado { min-height: 24px; margin: 10px 0 0; font-weight: 600; color: var(--cian); }
+  .estado.error { color: var(--mg-rojo-claro, #ff8a78); }
+  .archivo { display: block; margin-top: 10px; font-weight: 700; color: var(--gris); }
+  .archivo input { display: block; width: 100%; margin-top: 6px; color: var(--gris); font-weight: 500; }
+  .archivo input::file-selector-button {
+    min-height: 44px; margin-right: 12px; padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(39, 197, 230, .5);
+    background: rgba(39, 197, 230, .1); color: var(--texto); font: inherit; font-weight: 700; cursor: pointer;
+  }
+  .consejos { margin: 18px 0 0; padding-left: 20px; color: var(--gris); font-size: 15px; }
+  .consejos li { margin-bottom: 6px; }
+
+  .vista { grid-area: vista; position: sticky; top: 16px; display: flex; justify-content: center; min-width: 0; }
+  @media (max-width: 860px) { .vista { position: static; } }
+  .lienzo { position: relative; flex: none; border-radius: 6px; overflow: hidden; box-shadow: 0 24px 60px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 255, 255, .08); }
+  .lienzo > .afiche { transform-origin: 0 0; }
+
+  /* =====================================================================
+     AFICHE · mesa de trabajo de 1080 × 1920 px (9:16)
+     Zona segura: nada de texto ni QR a menos de 56 px del borde.
+     ===================================================================== */
+  .afiche {
+    --radio: 12px;
+    --piso: 900px;          /* línea donde apoyan las ruedas */
+    --extra-x: 0px;         /* fondo extendido para sangrado (solo al imprimir) */
+    --extra-y: 0px;
+    position: relative; width: 1080px; height: 1920px; overflow: hidden; flex: none;
+    background: var(--mg-fondo); color: var(--mg-texto); font-family: var(--mg-f-texto); font-weight: 400; line-height: normal;
+  }
+  .afiche p, .afiche h1, .afiche h2, .afiche ol { margin: 0; }
+  /* Fondo: grilla sutil + viñetas de luz */
+  .afiche .fondo-grilla { position: absolute; inset: calc(var(--extra-y) * -1) calc(var(--extra-x) * -1);
+    background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size: 54px 54px; background-position: calc(var(--extra-x) - 1px) calc(var(--extra-y) - 1px);
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.55) 40%, rgba(0,0,0,.55) 60%, #000 100%);
+            mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.55) 40%, rgba(0,0,0,.55) 60%, #000 100%); }
+  .afiche .fondo-vineta { position: absolute; inset: calc(var(--extra-y) * -1) calc(var(--extra-x) * -1);
+    background:
+      radial-gradient(1200px 700px at 50% 740px, rgba(39,197,230,.07), transparent 70%),
+      radial-gradient(900px 500px at 50% 0, rgba(210,59,42,.08), transparent 70%),
+      radial-gradient(1400px 900px at 50% 1500px, rgba(0,0,0,0), rgba(0,0,0,.35)); }
+
+  /* Capa de contenido: en la versión para historias se achica hacia el centro, lejos de las barras de Instagram */
+  .afiche .contenido { position: absolute; inset: 0; }
+  .afiche.historia .contenido { transform: scale(.78); transform-origin: 50% 50%; }
+  .afiche.historia .vineta-lados { left: -180px; right: -180px; }   /* que las sombras laterales sigan llegando al borde */
+
+  /* Marca (el logo incrustado viene recortado a su borde visible, así el pin queda en la línea de 56 px) */
+  .afiche .marca { position: absolute; top: 56px; left: 56px; display: flex; align-items: center; gap: 22px; z-index: 2; }
+  .afiche .marca img { height: 96px; width: auto; max-width: 180px; object-fit: contain; display: block; filter: drop-shadow(0 0 10px rgba(218,4,0,.22)); }
+  .afiche .palabra { font-family: 'Audiowide'; font-size: 54px; letter-spacing: .09em; line-height: 1; white-space: nowrap; }
+  .afiche .palabra .gps { color: var(--mg-rojo); }
+  .afiche .coords { position: absolute; top: 92px; right: 56px; z-index: 2; display: flex; align-items: center; gap: 10px;
+    font-family: 'Audiowide'; font-weight: 400; font-size: 22px; letter-spacing: .12em; margin-right: -.12em; color: var(--mg-texto-2); white-space: nowrap; }
+  .afiche .coords::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--mg-cian); box-shadow: 0 0 0 4px rgba(39,197,230,.18), 0 0 10px rgba(39,197,230,.8); }
+
+  /* Titular */
+  .afiche .titular { position: absolute; top: 180px; left: 56px; right: 56px; z-index: 2;
+    font-family: 'Orbitron'; font-weight: 900; font-size: 86px; line-height: 1.2; letter-spacing: -.01em; text-transform: uppercase; }
+  .afiche .titular > span { display: block; white-space: nowrap; }
+  .afiche .titular b { color: var(--mg-rojo); font-weight: 900; text-shadow: 0 0 40px rgba(210,59,42,.35); }
+  .afiche .bajada { position: absolute; top: 498px; left: 58px; z-index: 2; white-space: nowrap;
+    font-family: 'Rajdhani'; font-weight: 600; font-size: 34px; color: var(--mg-texto-2); letter-spacing: .01em; }
+  .afiche .bajada b { color: var(--mg-cian); font-weight: 700; }
+
+  /* Escenario del auto */
+  .afiche .escena { position: absolute; inset: 0; pointer-events: none; }
+  .afiche .vineta-lados { position: absolute; left: calc(var(--extra-x) * -1); right: calc(var(--extra-x) * -1); top: calc(var(--piso) - 410px); height: 520px;
+    background: linear-gradient(90deg, rgba(6,9,14,.55), transparent 22%, transparent 78%, rgba(6,9,14,.55));
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);   /* sin bordes duros arriba ni abajo */
+            mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent); }
+  .afiche .cono { position: absolute; left: -200px; right: -200px; top: calc(var(--piso) - 600px); height: 640px;
+    background: conic-gradient(from 158deg at 46% 0%, transparent 0deg, rgba(200,228,255,.06) 6deg, rgba(235,246,255,.24) 22deg, rgba(200,228,255,.06) 38deg, transparent 44deg);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, transparent 33%, #000 52%, #000 86%, transparent 100%);
+            mask-image: linear-gradient(180deg, transparent 0%, transparent 33%, #000 52%, #000 86%, transparent 100%); filter: blur(10px); }
+  .afiche .contraluz { position: absolute; left: 50%; top: calc(var(--piso) - 370px); width: 1240px; height: 420px; transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgba(255,150,120,.22), rgba(210,59,42,.22) 35%, rgba(210,59,42,.08) 65%, transparent); filter: blur(6px); }
+  .afiche .muro { position: absolute; left: 50%; top: calc(var(--piso) - 320px); width: 1300px; height: 290px; transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgba(70,120,170,.20), rgba(39,197,230,.05) 60%, transparent); }
+  .afiche .piso { position: absolute; left: -400px; right: -400px; top: var(--piso); height: 80px; overflow: hidden;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.7) 45%, transparent 100%);
+            mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,.7) 45%, transparent 100%); }
+  .afiche .piso svg { position: absolute; left: 0; top: 0; width: 1880px; height: 80px; display: block; }   /* rejilla en perspectiva dibujada en 2D (el rotateX 3D no sale al exportar la imagen) */
+  .afiche .piso::after { content: ""; position: absolute; inset: 0; background: radial-gradient(50% 120% at 50% 0, rgba(39,197,230,.10), transparent 70%); }
+  /* Charco de luz en el piso, delante del auto (no debajo: si no, se ve gris el hueco bajo la carrocería) */
+  .afiche .charco { position: absolute; left: 50%; top: calc(var(--piso) + 4px); width: 1100px; height: 90px; transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgba(190,225,255,.24), rgba(39,197,230,.08) 55%, transparent); }
+  /* Sombra de contacto: oscurece el hueco entre la carrocería y el piso para que el auto se apoye */
+  .afiche .sombra { position: absolute; left: 50%; top: calc(var(--piso) - 30px); width: 900px; height: 60px; transform: translateX(-50%);
+    background: radial-gradient(closest-side, rgba(0,0,0,.95), rgba(0,0,0,.6) 55%, transparent); }
+  /* El cuerpo del auto ocupa x 74–1509 del viewBox de 1600: con left 6 y ancho 1079 queda entre 56 y 1024.
+     Las ruedas tocan el piso en y = 642 del SVG (642 × 0,674 = 433 px).
+     Sin halo alrededor de la silueta; la cola se funde con la oscuridad para que no se lea como recortada. */
+  .afiche .auto { position: absolute; left: 6px; top: calc(var(--piso) - 433px); width: 1079px; height: auto; display: block; filter: none;
+    -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,.25) 0, #000 9%);
+            mask-image: linear-gradient(90deg, rgba(0,0,0,.25) 0, #000 9%); }
+  .afiche .destello { position: absolute; left: 1011px; top: calc(var(--piso) - 145px); width: 0; height: 0; }
+  .afiche .destello::before { content: ""; position: absolute; right: 6px; top: -2px; width: 640px; height: 4px; border-radius: 4px;
+    background: linear-gradient(90deg, transparent, rgba(39,197,230,.35) 50%, rgba(200,245,255,.95) 96%, rgba(39,197,230,.5));
+    filter: blur(1px); box-shadow: 0 0 12px rgba(39,197,230,.5); }
+  .afiche .destello::after { content: ""; position: absolute; left: -26px; top: -26px; width: 52px; height: 52px; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(235,252,255,.95), rgba(39,197,230,.5) 40%, transparent); }
+  /* Imagen propia del vehículo: se encaja apoyada en el piso, sin destello ni línea guía */
+  .afiche.auto-propio .auto { left: 56px; width: 968px; top: calc(var(--piso) - 350px); height: 360px; object-fit: contain; object-position: 50% 100%;
+    -webkit-mask-image: none; mask-image: none; }   /* 550–910 px: debajo de la bajada */
+  .afiche.auto-propio .destello, .afiche.auto-propio .guia { display: none; }
+  /* JPG con fondo negro: el negro se funde con el fondo oscuro del afiche */
+  .afiche img.sin-alfa { mix-blend-mode: lighten; filter: none; }
+
+  /* Etiqueta de telemetría con línea guía al auto */
+  .afiche .telemetria { position: absolute; left: 56px; top: 566px; z-index: 2; display: flex; align-items: center; gap: 10px; padding: 6px 14px;
+    border: 1.5px solid rgba(39,197,230,.45); border-radius: 8px; background: rgba(13,17,24,.75);
+    font-family: 'Rajdhani'; font-weight: 700; font-size: 26px; letter-spacing: .12em; color: var(--mg-texto-2); white-space: nowrap; }
+  .afiche .telemetria b { color: var(--mg-rojo); font-weight: 700; }
+  .afiche .telemetria::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--mg-rojo); box-shadow: 0 0 10px var(--mg-rojo); }
+  .afiche .guia { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 2; pointer-events: none; }
+
+  /* Precio (misma línea superior que la etiqueta, 24 px bajo la bajada) */
+  .afiche .precio { position: absolute; right: 56px; top: 566px; z-index: 2; filter: drop-shadow(0 0 22px rgba(246,91,50,.55)) drop-shadow(0 8px 16px rgba(0,0,0,.5)); }
+  .afiche .precio .cinta { padding: 12px 46px 8px; text-align: center; background: linear-gradient(135deg, var(--mg-precio-1), var(--mg-precio-2));
+    clip-path: polygon(24px 0, calc(100% - 24px) 0, 100% 50%, calc(100% - 24px) 100%, 24px 100%, 0 50%); }
+  .afiche .precio .etq { font-family: 'Rajdhani'; font-weight: 700; font-size: 26px; letter-spacing: .14em; color: #fff; line-height: 1; white-space: nowrap; text-shadow: 0 1px 2px rgba(80,10,0,.45); }
+  .afiche .precio .monto { font-family: 'Audiowide'; font-size: 60px; line-height: 1.05; color: #fff; white-space: nowrap; }
+  .afiche .precio .signo { color: var(--mg-oro); }
+
+  /* Características (tarjetas de marca con borde celeste) */
+  .afiche .caracts { position: absolute; left: 56px; right: 56px; top: 940px; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+  .afiche .chip { display: flex; align-items: center; gap: 18px; height: 74px; padding: 0 16px 0 12px; border-radius: var(--radio);
+    background: var(--mg-panel); border: 1px solid rgba(255,255,255,.06); border-left: 3px solid var(--mg-cian); }
+  .afiche .chip .ico { flex: none; width: 54px; height: 54px; border-radius: var(--radio); background: rgba(39,197,230,.07); border: 1.5px solid rgba(39,197,230,.55);
+    display: grid; place-items: center; }
+  .afiche .chip .ico svg { width: 30px; height: 30px; stroke: var(--mg-cian); }
+  .afiche .chip .t { font-family: 'Rajdhani'; font-weight: 700; font-size: 29px; line-height: 1; color: #fff; letter-spacing: .01em; white-space: nowrap; }
+
+  /* Boleto del concurso: texto | talón con el QR (muescas y línea punteada de corte) */
+  .afiche .ticket-sombra { position: absolute; left: 56px; right: 56px; top: 1140px; height: 428px; z-index: 2;
+    filter: drop-shadow(0 18px 40px rgba(0,0,0,.55)) drop-shadow(0 0 1px rgba(39,197,230,.6)); }
+  .afiche .ticket { position: absolute; inset: 0; display: flex; border-radius: var(--radio); overflow: hidden;
+    background: linear-gradient(135deg, #1f2738, #171d2a 60%, #1a2130);
+    -webkit-mask:
+      radial-gradient(circle 18px at 572px 0, #0000 98%, #000) top / 100% 51% no-repeat,
+      radial-gradient(circle 18px at 572px 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+            mask:
+      radial-gradient(circle 18px at 572px 0, #0000 98%, #000) top / 100% 51% no-repeat,
+      radial-gradient(circle 18px at 572px 100%, #0000 98%, #000) bottom / 100% 51% no-repeat; }
+  .afiche .ticket::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--mg-cian); }
+  .afiche .ticket .txt { flex: none; width: 572px; padding: 24px 22px 24px 40px; display: flex; flex-direction: column; justify-content: center; border-right: 2px dashed rgba(255,255,255,.16); }
+  .afiche .ceja { font-family: 'Audiowide'; font-size: 24px; letter-spacing: .2em; color: var(--mg-cian); display: flex; align-items: center; gap: 12px; }
+  .afiche .ceja::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--mg-rojo); box-shadow: 0 0 12px var(--mg-rojo); }
+  .afiche .ticket h2 { margin: 12px 0 16px; font-family: 'Orbitron'; font-weight: 900; font-size: 46px; line-height: 1.08; text-transform: uppercase; }
+  .afiche .ticket h2 > span { display: block; white-space: nowrap; }
+  .afiche .ticket h2 b { color: var(--mg-rojo); font-weight: 900; }
+  .afiche .pasos { list-style: none; padding: 0; display: grid; gap: 4px; }
+  .afiche .pasos li { display: flex; align-items: center; height: 36px; gap: 14px; font-family: 'Rajdhani'; font-weight: 600; font-size: 29px; line-height: 1.1; color: var(--mg-texto-2); white-space: nowrap; }
+  .afiche .pasos .n { flex: none; font-family: 'Audiowide'; font-size: 26px; color: var(--mg-cian); width: 22px; }
+  .afiche .pasos .ig { color: var(--mg-cian); font-weight: 700; }
+  .afiche .pasos .ig svg { display: inline-block; width: 25px; height: 25px; margin: 0 6px 0 2px; vertical-align: -4px; stroke: var(--mg-cian); }
+  .afiche .fecha { margin-top: 16px; display: flex; align-items: center; gap: 10px; font-family: 'Rajdhani'; font-weight: 700; font-size: 27px; color: #fff; white-space: nowrap; }
+  .afiche .fecha .tenue { color: var(--mg-texto-2); font-weight: 600; }
+  .afiche .fecha svg { width: 26px; height: 26px; stroke: var(--mg-rojo); flex: none; }
+  .afiche .talon { flex: 1; display: flex; flex-direction: column; align-items: center; }
+  /* La franja empieza 18 px a la derecha del corte, así la muesca no le muerde la esquina */
+  .afiche .leyenda { align-self: stretch; height: 50px; margin-left: 18px; display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--mg-cian); color: #0b0f16; font-family: 'Rajdhani'; font-weight: 700; font-size: 24px; letter-spacing: .06em; white-space: nowrap; }
+  .afiche .leyenda svg { width: 26px; height: 26px; stroke: #0b0f16; flex: none; }
+  .afiche .qr-zona { flex: 1; display: grid; place-items: center; width: 100%; padding-left: 18px; }
+  /* Muescas del talón para imprimir (en pantalla las recorta la máscara del boleto) */
+  .afiche .muesca { display: none; position: absolute; left: 554px; width: 36px; height: 36px; border-radius: 50%; background: var(--mg-fondo); box-shadow: inset 0 0 0 1px rgba(39,197,230,.45); }
+  .afiche .muesca.arriba { top: -18px; }
+  .afiche .muesca.abajo { bottom: -18px; }
+  .afiche .qr { position: relative; width: 333px; height: 333px; border-radius: var(--radio); overflow: hidden; background: #fff; }
+  .afiche .qr-codigo, .afiche .qr-codigo svg { width: 333px; height: 333px; display: block; }
+  /* Sello "QR DE MUESTRA": aparece mientras la dirección sea la de ejemplo o no sea válida */
+  .afiche .sello { position: absolute; inset: 0; background: rgba(255,255,255,.35); }
+  .afiche .sello span { position: absolute; left: 50%; top: 50%; width: 520px; transform: translate(-50%, -50%) rotate(-35deg); padding: 12px 0 10px; text-align: center;
+    background: rgba(210,59,42,.94); color: #fff; font-family: 'Audiowide'; font-size: 34px; letter-spacing: .08em; line-height: 1; white-space: nowrap;
+    box-shadow: 0 0 0 4px rgba(255,255,255,.9), 0 6px 18px rgba(0,0,0,.35); }
+
+  /* Llamado a la acción */
+  .afiche .wa { position: absolute; left: 56px; right: 56px; top: 1608px; height: 92px; border-radius: var(--radio); z-index: 2;
+    display: flex; align-items: center; justify-content: center; gap: 20px;
+    background: linear-gradient(90deg, #1db35a, var(--mg-wa-2));
+    box-shadow: 0 0 40px rgba(35,204,102,.32), inset 0 1px 0 rgba(255,255,255,.25); }
+  .afiche .wa svg { width: 44px; height: 44px; fill: #fff; flex: none; }
+  .afiche .wa span { font-family: 'Audiowide'; font-size: 33px; letter-spacing: .05em; color: #fff; text-transform: uppercase; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,.35); }
+  .afiche .tel { position: absolute; left: 56px; right: 56px; top: 1734px; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 20px; }
+  .afiche .tel svg { width: 44px; height: 44px; stroke: var(--mg-wa-1); flex: none; }
+  .afiche .tel span { font-family: 'Audiowide'; font-weight: 400; font-size: 54px; line-height: 1; letter-spacing: .03em; word-spacing: .1em; color: #fff; white-space: nowrap; }
+  /* Pie: dirección + dónde están las bases (Ley 19.496, art. 35). La dirección web va en minúsculas, tal como se escribe. */
+  .afiche .pie { position: absolute; left: 56px; right: 56px; top: 1828px; z-index: 2; text-align: center; white-space: nowrap;
+    font-family: 'Rajdhani'; font-weight: 600; font-size: 24px; letter-spacing: .12em; text-transform: uppercase; color: var(--mg-texto-3); }
+  .afiche .pie .web { text-transform: none; letter-spacing: .06em; color: var(--mg-texto-2); }
+  .afiche .pie [data-campo="direccion"]:not(:empty) + [data-campo="bases"]:not(:empty)::before { content: " · "; }
+
+  /* Al imprimir, el afiche se extiende con fondo (sangrado) sin mover el contenido */
+  .afiche.extendido { overflow: visible; }
+
+  /* ---------- Impresión ---------- */
+  #impresion { display: none; }
+  .hoja { position: relative; overflow: hidden; break-after: page; page-break-after: always; }
+  .hoja:last-child { break-after: auto; page-break-after: auto; }
+  .hoja.a4 { width: 210mm; height: 297mm; background: var(--mg-fondo); }
+  .hoja.dos { width: 297mm; height: 210mm; background: #fff; }
+  .hoja .caja { position: absolute; overflow: hidden; }
+  .hoja .caja > .afiche { position: absolute; transform-origin: 0 0; }
+  .hoja .corte { position: absolute; background: #000; }
+  /* 2 por hoja (10 cm de ancho): los textos de 24 px saldrían de ~6 pt; se agrandan y se aclaran */
+  .hoja.dos .afiche .pie { color: var(--mg-texto-2); }
+  .hoja.dos .afiche .pie[data-cabe-28] { font-size: 28px; }   /* solo si a 28 px sigue cabiendo en una línea */
+  .hoja.dos .afiche .coords { display: none; }
+  @media print {
+    html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; min-height: 0 !important; }
+    .app { display: none !important; }
+    #impresion { display: block; }
+    #impresion, #impresion * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    /* Sin máscara ni filtro en el boleto: así el texto del concurso y el QR quedan vectoriales en el PDF */
+    .afiche .ticket-sombra { filter: none; box-shadow: 0 18px 40px rgba(0,0,0,.55); border-radius: 12px; }
+    .afiche .ticket { -webkit-mask: none; mask: none; }
+    .afiche .muesca { display: block; }
+  }
+</style>
+<style id="estilo-pagina">@page { size: A4 portrait; margin: 0; }</style>
+</head>
+<body>
+<div class="app">
+  <section class="panel panel-url" aria-label="Dirección del concurso">
+    <h1>Afiche y QR <span>del concurso</span></h1>
+    <p>Escribe la dirección donde quedó publicada la página del concurso. El QR del afiche se actualiza solo.</p>
+
+    <label class="campo" for="url">Dirección de la página del concurso</label>
+    <input type="url" id="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://tusitio.cl/concurso/">
+    <label class="check"><input type="checkbox" id="con-origen" checked> <span>Agregar <b>?src=qr</b> para saber en la planilla quién llegó escaneando el QR</span></label>
+    <p class="url-final" id="url-final"></p>
+    <p class="aviso" id="aviso" hidden></p>
+  </section>
+
+  <section class="panel panel-acciones" aria-label="Descargar e imprimir">
+    <h2>Descargar</h2>
+    <button type="button" class="btn" id="btn-png">Descargar afiche PNG (1080×1920)</button>
+    <button type="button" class="btn sec" id="btn-png-2x">PNG alta resolución (2160×3840)</button>
+    <button type="button" class="btn sec" id="btn-png-historia">PNG para historias de Instagram y estados de WhatsApp</button>
+    <button type="button" class="btn sec" id="btn-png-imprenta">PNG para imprenta a 10 × 17,8 cm con sangrado de 3 mm</button>
+    <p class="nota">El de historias deja libres las barras de arriba y abajo de Instagram y dice «link en la bio» en vez de «escanea». El de sangrado úsalo solo si la imprenta te lo pide.</p>
+    <p class="estado" id="estado" role="status" aria-live="polite"></p>
+
+    <h2>Imprimir</h2>
+    <button type="button" class="btn sec" id="btn-imprimir-a4">Imprimir afiche A4</button>
+    <button type="button" class="btn sec" id="btn-imprimir-2">Imprimir 2 por hoja A4 (para recortar)</button>
+    <p class="nota">En la ventana de impresión activa «Gráficos de fondo» y usa márgenes «Ninguno». En 2 por hoja, cada afiche mide 10 × 17,8 cm: recorta por las marcas.</p>
+
+    <h2>Solo el QR</h2>
+    <button type="button" class="btn sec" id="btn-qr-png">Descargar solo el QR (PNG)</button>
+    <button type="button" class="btn sec" id="btn-qr-svg">Descargar solo el QR (SVG, para imprenta)</button>
+
+    <h2>Imágenes</h2>
+    <label class="archivo">Cambiar imagen del vehículo<input type="file" id="archivo-vehiculo" accept="image/png,image/jpeg,image/webp,image/svg+xml"></label>
+    <label class="archivo">Cambiar logo<input type="file" id="archivo-logo" accept="image/png,image/jpeg,image/webp,image/svg+xml"></label>
+    <p class="nota">PNG, JPG, WebP o SVG. Usa una imagen sin fondo o con fondo negro.</p>
+    <button type="button" class="btn sec" id="btn-restaurar" hidden>Volver a las imágenes originales</button>
+
+    <ul class="consejos">
+      <li>Antes de imprimir, escanea el QR del afiche con tu celular y verifica que abre la página del concurso. Si estás usando el celular, descarga el PNG y escanéalo desde otra pantalla.</li>
+      <li>Revisa que <b>@<span id="ig-panel">maulegps</span></b> sea tu Instagram correcto.</li>
+      <li>Mientras el QR diga «QR DE MUESTRA», el afiche todavía no sirve para imprimir.</li>
+      <li>Los textos, el precio y la fecha se cambian en el bloque CONFIGURACIÓN, al principio de este archivo.</li>
+    </ul>
+  </section>
+
+  <div class="vista" id="vista">
+    <div class="lienzo" id="lienzo">
+      <div class="afiche" id="afiche" role="img" aria-label="Vista previa del afiche">
+        <div class="fondo-grilla"></div>
+        <div class="fondo-vineta"></div>
+        <div class="contenido">
+
+        <header class="marca">
+          <img data-imagen="logo" src="@@LOGO@@" alt="Logo">
+          <div class="palabra" data-campo="marca">MAULE <span class="gps">GPS</span></div>
+        </header>
+        <div class="coords" data-campo="coordenadas" hidden></div>
+
+        <h1 class="titular" data-campo="titular"><span>ENCUÉNTRALO,</span><span>APÁGALO</span><span>Y <b>RECUPÉRALO</b>.</span></h1>
+        <p class="bajada" data-campo="bajada">Rastreo GPS para tu auto, <b>desde tu celular</b>.</p>
+
+        <div class="escena" aria-hidden="true">
+          <div class="vineta-lados"></div>
+          <div class="muro"></div>
+          <div class="contraluz"></div>
+          <div class="cono"></div>
+          <div class="piso"><svg viewBox="0 0 1880 80" preserveAspectRatio="none" aria-hidden="true"><path fill="rgba(39,197,230,.3)" d="M20 0H22L-1317.0 80H-1321.9ZM100 0H102L-1120.3 80H-1125.2ZM180 0H182L-923.6 80H-928.5ZM260 0H262L-726.9 80H-731.8ZM340 0H342L-530.2 80H-535.2ZM420 0H422L-333.6 80H-338.5ZM500 0H502L-136.9 80H-141.8ZM580 0H582L59.8 80H54.9ZM660 0H662L256.5 80H251.6ZM740 0H742L453.2 80H448.3ZM820 0H822L649.9 80H645.0ZM900 0H902L846.6 80H841.7ZM980 0H982L1043.3 80H1038.3ZM1060 0H1062L1239.9 80H1235.0ZM1140 0H1142L1436.6 80H1431.7ZM1220 0H1222L1633.3 80H1628.4ZM1300 0H1302L1830.0 80H1825.1ZM1380 0H1382L2026.7 80H2021.8ZM1460 0H1462L2223.4 80H2218.5ZM1540 0H1542L2420.1 80H2415.2ZM1620 0H1622L2616.8 80H2611.8ZM1700 0H1702L2813.5 80H2808.5ZM1780 0H1782L3010.1 80H3005.2ZM1860 0H1862L3206.8 80H3201.9Z"/><rect width="1880" height="1" fill="rgba(39,197,230,.2)"/><rect y="29.9" width="1880" height="1.2" fill="rgba(39,197,230,.34)"/></svg></div>
+          <div class="charco"></div>
+          <div class="sombra"></div>
+          <img class="auto" data-imagen="vehiculo" src="@@VEHICULO@@" alt="">
+          <div class="destello"></div>
+        </div>
+
+        <svg class="guia" viewBox="0 0 1080 1920" aria-hidden="true"><polyline points="190,613 190,660 236,690" fill="none" stroke="rgba(39,197,230,.7)" stroke-width="2"/><circle cx="236" cy="690" r="5" fill="#11161f" stroke="#27c5e6" stroke-width="2.5"/></svg>
+        <div class="telemetria" data-campo="telemetria">AUTO: <b>APAGADO</b></div>
+
+        <div class="precio">
+          <div class="cinta">
+            <div class="etq" data-campo="precio-etiqueta">PLAN MENSUAL</div>
+            <div class="monto" data-campo="precio"><span class="signo">$</span>3.990</div>
+          </div>
+        </div>
+
+        <section class="caracts">
+          <div class="chip"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v9"/><path d="M18.4 6.6a9 9 0 1 1-12.8 0"/></svg></div><div class="t" data-campo="caract-1">Apagado remoto</div></div>
+          <div class="chip"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="t" data-campo="caract-2">Ubicación en tiempo real</div></div>
+          <div class="chip"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div><div class="t" data-campo="caract-3">Alerta de movimiento</div></div>
+          <div class="chip"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="t" data-campo="caract-4">Historial de recorridos</div></div>
+        </section>
+
+        <div class="ticket-sombra">
+          <section class="ticket">
+            <i class="muesca arriba"></i><i class="muesca abajo"></i>
+            <div class="txt">
+              <div class="ceja" data-campo="concurso-ceja">CONCURSO</div>
+              <h2 data-campo="concurso-titulo"><span>GANA</span><span>LA INSTALACIÓN</span><span>DE TU GPS <b>GRATIS</b></span></h2>
+              <ol class="pasos">
+                <li><span class="n" data-campo="paso-1-n">1</span><span data-campo="paso-1">Escanea el código QR</span></li>
+                <li><span class="n" data-campo="paso-2-n">2</span><span data-campo="paso-2">Sigue a <span class="ig"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6"/></svg><span data-campo="instagram">@maulegps</span></span> en Instagram</span></li>
+                <li><span class="n" data-campo="paso-3-n">3</span><span data-campo="paso-3">Completa tus datos</span></li>
+              </ol>
+              <div class="fecha"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span data-campo="fecha-sorteo"><span class="tenue">Sorteo en vivo ·</span> domingo 18 de octubre</span></div>
+            </div>
+            <div class="talon">
+              <div class="leyenda"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-icono-leyenda><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10 18h4"/></svg><span data-campo="qr-leyenda">ESCANEA PARA PARTICIPAR</span></div>
+              <div class="qr-zona">
+                <div class="qr">
+                  <div class="qr-codigo" data-campo="qr"></div>
+                  <div class="sello" data-sello><span data-campo="qr-sello">QR DE MUESTRA</span></div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="wa">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 1.8a8.2 8.2 0 1 1-4.2 15.3l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 0 1 12 3.8Zm-3.3 4.1c-.2 0-.5 0-.7.3-.3.3-1 1-1 2.3s1 2.6 1.1 2.8c.2.2 1.9 2.9 4.6 4.1.6.3 1.1.5 1.5.6.7.2 1.2.2 1.7.1.5 0 1.6-.6 1.8-1.2.2-.6.2-1.1.1-1.2 0-.1-.2-.2-.5-.3l-1.9-.9c-.2-.1-.4-.2-.6.1l-.8 1c-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.4-.4.3-.5c.1-.2.1-.4 0-.5l-.8-2c-.2-.5-.4-.5-.6-.5h-.7Z"/></svg>
+          <span data-campo="cta">Escríbenos por WhatsApp</span>
+        </div>
+        <div class="tel">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 1.1 4.2 2 2 0 0 1 3.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L7 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2Z"/></svg>
+          <span data-campo="telefono">+56 9 7803 8759</span>
+        </div>
+        <div class="pie"><span data-campo="direccion">4 Norte 1163 · Talca</span><span data-campo="bases"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Copias del afiche para imprimir (se arman al presionar Imprimir) -->
+<div id="impresion" aria-hidden="true"></div>
+
+<script>
+/*@@QRCODE_JS@@*/
+</script>
+<script>
+/*@@HTML_TO_IMAGE_JS@@*/
+</script>
+<script>
+const $ = (id) => document.getElementById(id);
+const afiche = $('afiche');
+const ANCHO = 1080;
+const ALTO = 1920;
+const MM = 96 / 25.4;   // px CSS por milímetro
+const NOMBRE = 'afiche-' + (String(CONFIG.instagram || 'maulegps').replace(/^@/, '') || 'maulegps');
+const EJEMPLO = 'https://TU-SITIO.cl/concurso/';
+// Direcciones que solo existen en tu computador o en tu red (wifi): desde otro celular el QR no abriría nada
+const LOCAL = /^(localhost|.*\.localhost|.*\.local|0\.0\.0\.0|127(\.\d+){3}|10(\.\d+){3}|192\.168(\.\d+){2}|172\.(1[6-9]|2\d|3[01])(\.\d+){2}|169\.254(\.\d+){2}|\[.*\])$/i;
+// Dominios de ejemplo (el de CONFIG y el que aparece en las instrucciones): llevan el sello «QR DE MUESTRA»
+const DE_EJEMPLO = /^(www\.)?(tu-?sitio\.cl|example\.(com|org|net))$/i;
+qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
+
+let qrActual = null;      // QR dibujado en el afiche
+let urlActual = '';       // dirección codificada en el QR ('' si es de muestra)
+let urlQR = '';           // lo que dice el QR dibujado (real o de muestra)
+let estadoUrl = 'invalida';
+let modoImpresion = null; // 'a4' o 'dos' mientras está abierta la impresión
+let exportando = false;
+const originales = {};    // imágenes incrustadas (para "Volver a las originales")
+const propias = {};       // object URLs de las imágenes elegidas
+
+/* ---------- Textos del afiche desde CONFIG ---------- */
+function escapar(t) {
+  return String(t == null ? '' : t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+// *palabra* → <b>palabra</b> (el color lo pone el CSS de cada bloque)
+function destacar(t) { return escapar(t).replace(/\*([^*]+)\*/g, '<b>$1</b>'); }
+function campo(nombre) { return afiche.querySelector('[data-campo="' + nombre + '"]'); }
+function poner(nombre, html) { const el = campo(nombre); if (el) el.innerHTML = html; }
+
+function fechaSorteo() {
+  const d = new Date(CONFIG.sorteo);
+  if (isNaN(d)) return '';
+  return new Intl.DateTimeFormat('es-CL', { timeZone: 'America/Santiago', weekday: 'long', day: 'numeric', month: 'long' }).format(d).replace(',', '');
+}
+
+function telefonoLegible() {
+  if (CONFIG.telefonoTexto) return CONFIG.telefonoTexto;
+  const d = String(CONFIG.whatsapp || '').replace(/\D/g, '');   // 56978038759 → +56 9 7803 8759
+  return d.length === 11 ? `+${d.slice(0, 2)} ${d[2]} ${d.slice(3, 7)} ${d.slice(7)}` : '+' + d;
+}
+
+const ICONO_IG = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6"/></svg>';
+
+function pintarPaso(i, texto) {
+  const ig = '@' + String(CONFIG.instagram || '').replace(/^@/, '');
+  const partes = escapar(texto).split('{instagram}');
+  poner('paso-' + (i + 1), partes.join('<span class="ig">' + ICONO_IG + '<span data-campo="instagram">' + escapar(ig) + '</span></span>'));
+}
+
+function pintarTextos() {
+  const palabras = String(CONFIG.negocio || '').toUpperCase().trim().split(/\s+/);
+  const ultima = palabras.pop();
+  poner('marca', (palabras.length ? escapar(palabras.join(' ')) + ' ' : '') + '<span class="gps">' + escapar(ultima) + '</span>');
+  poner('coordenadas', escapar(CONFIG.coordenadas || ''));
+  campo('coordenadas').hidden = !CONFIG.coordenadas;
+
+  // Titular: una línea por elemento; lo que va entre *asteriscos* sale en rojo (ej. 'Y *RECUPÉRALO*.')
+  poner('titular', (CONFIG.titular || []).map((l) => '<span>' + destacar(l) + '</span>').join(''));
+  poner('bajada', destacar(CONFIG.bajada));
+  (CONFIG.caracteristicas || []).forEach((t, i) => poner('caract-' + (i + 1), escapar(t)));
+  poner('telemetria', destacar(CONFIG.telemetria));
+  campo('telemetria').hidden = !CONFIG.telemetria;
+  afiche.querySelector('.guia').style.visibility = CONFIG.telemetria ? '' : 'hidden';
+
+  poner('precio-etiqueta', escapar(CONFIG.etiquetaPrecio));
+  const precio = String(CONFIG.precio || '');
+  poner('precio', precio.startsWith('$') ? '<span class="signo">$</span>' + escapar(precio.slice(1)) : escapar(precio));
+
+  poner('concurso-titulo', (CONFIG.tituloConcurso || []).map((l) => '<span>' + destacar(l) + '</span>').join(''));
+  (CONFIG.pasos || []).forEach((t, i) => pintarPaso(i, t));
+  poner('qr-leyenda', escapar(CONFIG.leyendaQR || 'ESCANEA PARA PARTICIPAR'));
+  const f = fechaSorteo();
+  if (!f) mostrarEstado('Revisa «sorteo» en CONFIGURACIÓN: la fecha no es válida (formato 2026-10-18T20:00:00-03:00).', true);
+  poner('fecha-sorteo', f ? '<span class="tenue">Sorteo en vivo ·</span> ' + escapar(f) : '<span class="tenue">Sorteo en vivo por Instagram</span>');
+  poner('telefono', escapar(telefonoLegible()));
+  $('ig-panel').textContent = String(CONFIG.instagram || '').replace(/^@/, '');
+  pintarPie();
+}
+
+// Versión para historias de Instagram / estados de WhatsApp: contenido achicado y "link en la bio" en vez de "escanea"
+const ICONO_CELULAR = '<rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10 18h4"/>';
+const ICONO_LINK = '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>';
+function textosHistoria(activar) {
+  const h = CONFIG.historia || {};
+  afiche.classList.toggle('historia', activar);
+  afiche.querySelector('[data-icono-leyenda]').innerHTML = activar && h.leyendaQR ? ICONO_LINK : ICONO_CELULAR;
+  pintarPaso(0, activar && h.paso1 ? h.paso1 : (CONFIG.pasos || [''])[0]);
+  poner('qr-leyenda', escapar(activar && h.leyendaQR ? h.leyendaQR : (CONFIG.leyendaQR || 'ESCANEA PARA PARTICIPAR')));
+}
+
+// "https://www.maulegps.cl/concurso/?src=qr" → "maulegps.cl/concurso"
+function webCorta(href) {
+  try {
+    const u = new URL(href);
+    return (u.hostname.replace(/^www\./, '') + u.pathname).replace(/\/index\.html?$/i, '').replace(/\/$/, '');
+  } catch (e) { return ''; }
+}
+
+// Pie: dirección del local + dónde están las bases (Ley 19.496, art. 35). Si no cabe en una línea, se acorta.
+function pintarPie() {
+  const pie = afiche.querySelector('.pie');
+  const web = webCorta(urlQR || CONFIG.urlConcurso);
+  const conWeb = (t) => escapar(t).split('{web}').join('<span class="web">' + escapar(web) + '</span>');
+  const bases = CONFIG.bases ? (web || !/\{web\}/.test(CONFIG.bases) ? conWeb(CONFIG.bases) : '') : '';
+  const opciones = [
+    [escapar(CONFIG.direccion || ''), bases],
+    ['', bases],
+    ['', bases ? escapar('Bases en la página del QR') : ''],
+  ];
+  for (const [dir, b] of opciones) {
+    poner('direccion', dir);
+    poner('bases', b);
+    if (pie.scrollWidth <= pie.clientWidth + 1) break;
+  }
+  // En "2 por hoja" el pie se agranda a 28 px para que no se empaste al imprimir chico; se marca si cabe
+  pie.style.fontSize = '28px';
+  pie.toggleAttribute('data-cabe-28', pie.scrollWidth <= pie.clientWidth + 1);
+  pie.style.fontSize = '';
+}
+
+/* ---------- Dirección y QR ---------- */
+function revisarUrl() {
+  let texto = $('url').value.trim();
+  // "www.maulegps.cl/concurso/" escrito sin https:// → se completa
+  if (!/^[a-z][a-z0-9+.-]*:/i.test(texto) && /^[^\s\/]+\.[^\s\/]+/.test(texto)) texto = 'https://' + texto;
+  let u;
+  try { u = new URL(texto); } catch (e) { return { estado: 'invalida' }; }
+  if (!/^https?:$/.test(u.protocol)) return { estado: 'invalida' };
+  if (LOCAL.test(u.hostname)) return { estado: 'local' };
+  if (!u.hostname.includes('.')) return { estado: 'invalida' };
+  // ?src=qr: solo se toca la consulta cuando hace falta (no se reescriben los demás parámetros)
+  const src = u.searchParams.get('src');
+  if ($('con-origen').checked) {
+    if (src === null) u.search = (u.search.length > 1 ? u.search + '&' : '?') + 'src=qr';
+    else if (src !== 'qr') u.searchParams.set('src', 'qr');
+  } else if (src === 'qr') u.searchParams.delete('src');
+  if (DE_EJEMPLO.test(u.hostname)) return { estado: 'ejemplo', url: u.href };
+  if (/\/admin(\/((afiche|qr|sorteo)\.html)?)?$/i.test(u.pathname)) return { estado: 'herramienta', url: u.href };
+  return { estado: u.protocol === 'http:' ? 'http' : 'ok', url: u.href };
+}
+
+function crearQR(texto) {
+  const qr = qrcode(0, 'M');   // corrección de errores M (15 %)
+  qr.addData(texto);
+  qr.make();
+  return qr;
+}
+
+// SVG nítido a cualquier tamaño, con la zona blanca de 4 módulos que exige el estándar
+function qrASVG(qr, ancho) {
+  const n = qr.getModuleCount();
+  const margen = 4;
+  const lado = n + margen * 2;
+  let d = '';
+  for (let f = 0; f < n; f++) {
+    for (let k = 0; k < n; k++) {
+      if (!qr.isDark(f, k)) continue;
+      let largo = 1;
+      while (k + largo < n && qr.isDark(f, k + largo)) largo++;
+      d += `M${k + margen} ${f + margen}h${largo}v1h-${largo}z`;
+      k += largo - 1;
+    }
+  }
+  const tam = ancho ? ` width="${ancho}" height="${ancho}"` : '';
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${lado} ${lado}"${tam} shape-rendering="crispEdges" role="img" aria-label="Código QR del concurso"><rect width="100%" height="100%" fill="#ffffff"/><path fill="#0b0f16" d="${d}"/></svg>`;
+}
+
+function qrACanvas(qr, tamano) {
+  const n = qr.getModuleCount();
+  const margen = 4;
+  const celda = Math.max(1, Math.floor(tamano / (n + margen * 2)));
+  const lado = celda * (n + margen * 2);
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = lado;
+  const c = canvas.getContext('2d');
+  c.fillStyle = '#ffffff';
+  c.fillRect(0, 0, lado, lado);
+  c.fillStyle = '#0b0f16';
+  for (let f = 0; f < n; f++) for (let k = 0; k < n; k++) {
+    if (qr.isDark(f, k)) c.fillRect((k + margen) * celda, (f + margen) * celda, celda, celda);
+  }
+  return canvas;
+}
+
+const AVISOS = {
+  invalida: 'Escribe la dirección completa de la página del concurso, con https:// (por ejemplo https://tusitio.cl/concurso/, pero con tu sitio). Mientras tanto el afiche muestra «QR DE MUESTRA».',
+  local: 'Esa dirección solo funciona en tu computador o en tu red wifi: desde otro celular no abriría. Escribe la dirección pública de la página del concurso.',
+  ejemplo: 'Todavía está la dirección de ejemplo. El afiche muestra «QR DE MUESTRA» hasta que escribas la dirección real de tu página.',
+  herramienta: 'Esa parece la dirección de esta herramienta (/admin/). Usa la de la página del concurso, sin /admin/.',
+  larga: 'La dirección es demasiado larga para un código QR. Usa una dirección más corta.',
+  http: 'La dirección empieza con http://. Si tu página tiene candado, usa https://.',
+  ok: '',
+};
+const DENSO = 'La dirección es muy larga y el QR queda muy denso: usa una dirección más corta.';
+
+// QR de muestra (se dibuja tapado con el sello cuando la dirección no sirve)
+function urlDeEjemplo() {
+  let ej;
+  try { ej = new URL(CONFIG.urlConcurso); } catch (e) { ej = new URL(EJEMPLO); }
+  if (!/^https?:$/.test(ej.protocol)) ej = new URL(EJEMPLO);
+  if ($('con-origen').checked) ej.searchParams.set('src', 'qr');
+  return ej.href;
+}
+
+function actualizar() {
+  // Primero se arma el QR; el estado se guarda solo con el resultado final (si algo falla, queda el sello)
+  let r = { estado: 'invalida' };
+  let qr = null;
+  let texto = '';
+  try {
+    r = revisarUrl();
+    try { texto = r.url || urlDeEjemplo(); qr = crearQR(texto); }
+    catch (e) { r = { estado: 'larga' }; texto = urlDeEjemplo(); qr = crearQR(texto); }
+  } catch (e) { r = { estado: 'invalida' }; }
+  const sirve = !!qr && (r.estado === 'ok' || r.estado === 'http');
+  estadoUrl = !qr && (r.estado === 'ok' || r.estado === 'http') ? 'invalida' : r.estado;
+  urlActual = sirve ? r.url : '';
+  urlQR = qr ? texto : '';
+  qrActual = qr;
+  $('url-final').textContent = r.url || '—';
+  let aviso = AVISOS[estadoUrl] || '';
+  if (sirve && qr.getModuleCount() > 41) aviso = (aviso ? aviso + ' ' : '') + DENSO;
+  $('aviso').textContent = aviso;
+  $('aviso').hidden = !aviso;
+  try { campo('qr').innerHTML = qr ? qrASVG(qr) : ''; } catch (e) { campo('qr').innerHTML = ''; }
+  afiche.querySelector('[data-sello]').hidden = sirve;
+  ['btn-qr-png', 'btn-qr-svg'].forEach((b) => { $(b).disabled = !sirve; });
+  pintarPie();
+}
+
+/* ---------- Vista previa escalada ---------- */
+function ajustarVista() {
+  const ancho = $('vista').clientWidth;
+  const angosta = window.matchMedia('(max-width: 860px)').matches;
+  const alto = angosta ? Math.max(window.innerHeight * 0.85, 420) : window.innerHeight - 32;
+  const k = Math.min(ancho / ANCHO, alto / ALTO, 1);
+  afiche.style.transform = 'scale(' + k + ')';
+  $('lienzo').style.width = Math.floor(ANCHO * k) + 'px';
+  $('lienzo').style.height = Math.floor(ALTO * k) + 'px';
+}
+
+/* ---------- Exportar imágenes ---------- */
+function descargar(nombre, href) {
+  const a = document.createElement('a');
+  a.href = href;
+  a.download = nombre;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+function descargarBlob(blob, nombre) {
+  const href = URL.createObjectURL(blob);
+  descargar(nombre, href);
+  setTimeout(() => URL.revokeObjectURL(href), 5000);
+}
+
+function crc32(bytes) {
+  let crc = 0xFFFFFFFF;
+  for (let i = 0; i < bytes.length; i++) {
+    let c = (crc ^ bytes[i]) & 0xFF;
+    for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1;
+    crc = (crc >>> 8) ^ c;
+  }
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+
+// Anota en el PNG su resolución de impresión (bloque pHYs), así la imprenta lo abre con su tamaño real en cm
+function conResolucion(bytes, pxPorMetro) {
+  const v = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  for (let p = 8; p + 8 <= bytes.length;) {   // si ya trae pHYs, no se toca
+    const tipo = String.fromCharCode(bytes[p + 4], bytes[p + 5], bytes[p + 6], bytes[p + 7]);
+    if (tipo === 'pHYs') return bytes;
+    if (tipo === 'IDAT') break;
+    p += 12 + v.getUint32(p);
+  }
+  const bloque = new Uint8Array(21);
+  const b = new DataView(bloque.buffer);
+  b.setUint32(0, 9);
+  bloque.set([0x70, 0x48, 0x59, 0x73], 4);   // "pHYs"
+  b.setUint32(8, pxPorMetro);
+  b.setUint32(12, pxPorMetro);
+  bloque[16] = 1;                            // unidad: metro
+  b.setUint32(17, crc32(bloque.subarray(4, 17)));
+  const fin = 8 + 25;                        // firma + IHDR
+  const out = new Uint8Array(bytes.length + bloque.length);
+  out.set(bytes.subarray(0, fin));
+  out.set(bloque, fin);
+  out.set(bytes.subarray(fin), fin + bloque.length);
+  return out;
+}
+
+function descargarCanvas(canvas, nombre, pxPorMetro) {
+  return new Promise((listo, falla) => canvas.toBlob(async (blob) => {
+    try {
+      if (!blob) throw new Error('No se pudo crear la imagen');
+      if (pxPorMetro) blob = new Blob([conResolucion(new Uint8Array(await blob.arrayBuffer()), pxPorMetro)], { type: 'image/png' });
+      descargarBlob(blob, nombre);
+      listo();
+    } catch (e) { falla(e); }
+  }, 'image/png'));
+}
+
+// Solo las reglas @font-face (con las fuentes incrustadas) para meterlas dentro de la imagen
+function cssFuentes() {
+  return ($('marca').textContent.match(/@font-face\s*{[^}]*}/g) || []).join('\n');
+}
+
+async function afichecanvas(escala) {
+  await document.fonts.ready;
+  await Promise.all([...afiche.querySelectorAll('img')].map((img) => (img.decode ? img.decode().catch(() => {}) : null)));
+  const opciones = {
+    pixelRatio: escala, width: ANCHO, height: ALTO, canvasWidth: ANCHO, canvasHeight: ALTO,
+    backgroundColor: getComputedStyle(afiche).backgroundColor,
+    fontEmbedCSS: cssFuentes(),
+    style: { transform: 'none', margin: '0' },   // se exporta la mesa de trabajo sin la escala de la vista previa
+  };
+  // Safari a veces no pinta fuentes ni imágenes en la primera pasada
+  if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) await htmlToImage.toCanvas(afiche, opciones);
+  return htmlToImage.toCanvas(afiche, opciones);
+}
+
+// Sangrado: se agregan 3 mm por lado repitiendo el borde del fondo (el contenido no se mueve)
+function conSangrado(origen, sangre) {
+  const W = origen.width;
+  const H = origen.height;
+  const c = document.createElement('canvas');
+  c.width = W + sangre * 2;
+  c.height = H + sangre * 2;
+  const x = c.getContext('2d');
+  x.imageSmoothingEnabled = false;
+  x.drawImage(origen, sangre, sangre);
+  const i = 2;   // se toma la columna/fila a 2 px del borde para no estirar una línea de la grilla
+  x.drawImage(origen, i, 0, 1, H, 0, sangre, sangre, H);
+  x.drawImage(origen, W - 1 - i, 0, 1, H, sangre + W, sangre, sangre, H);
+  x.drawImage(origen, 0, i, W, 1, sangre, 0, W, sangre);
+  x.drawImage(origen, 0, H - 1 - i, W, 1, sangre, sangre + H, W, sangre);
+  x.drawImage(origen, i, i, 1, 1, 0, 0, sangre, sangre);
+  x.drawImage(origen, W - 1 - i, i, 1, 1, sangre + W, 0, sangre, sangre);
+  x.drawImage(origen, i, H - 1 - i, 1, 1, 0, sangre + H, sangre, sangre);
+  x.drawImage(origen, W - 1 - i, H - 1 - i, 1, 1, sangre + W, sangre + H, sangre, sangre);
+  return c;
+}
+
+function mostrarEstado(texto, error) {
+  $('estado').textContent = texto;
+  $('estado').classList.toggle('error', !!error);
+}
+
+async function exportar(tipo) {
+  if (exportando) return;
+  exportando = true;
+  const botones = ['btn-png', 'btn-png-2x', 'btn-png-historia', 'btn-png-imprenta'];
+  botones.forEach((b) => { $(b).disabled = true; });
+  // La imagen sale con el QR de este momento: mientras se genera no se puede cambiar la dirección
+  const url0 = urlActual;
+  const estado0 = estadoUrl;
+  $('url').readOnly = true;
+  $('con-origen').disabled = true;
+  mostrarEstado('Generando la imagen… puede tardar unos segundos.');
+  try {
+    if (tipo === 'normal') await descargarCanvas(await afichecanvas(1), NOMBRE + '.png');
+    if (tipo === 'alta') await descargarCanvas(await afichecanvas(2), NOMBRE + '-alta.png');
+    if (tipo === 'historia') {
+      textosHistoria(true);
+      try { await descargarCanvas(await afichecanvas(1), NOMBRE + '-historia.png'); } finally { textosHistoria(false); }
+    }
+    if (tipo === 'imprenta') {
+      // A escala 2 el afiche mide 2160 px = 10 cm de ancho → 3 mm = 65 px por lado (21 600 px por metro)
+      const sangre = Math.round(ANCHO * 2 * 3 / 100);
+      await descargarCanvas(conSangrado(await afichecanvas(2), sangre), NOMBRE + '-imprenta-10cm-sangrado.png', ANCHO * 2 * 10);
+    }
+    if (urlActual !== url0) mostrarEstado('La dirección cambió mientras se generaba la imagen. Vuelve a descargarla.', true);
+    else mostrarEstado(estado0 === 'ok' || estado0 === 'http' ? 'Listo. Revisa tu carpeta de descargas.' : 'Listo, pero ojo: el afiche lleva «QR DE MUESTRA» porque falta la dirección real.');
+  } catch (e) {
+    console.error(e);
+    mostrarEstado('No se pudo generar la imagen. Prueba con Chrome o Edge actualizados.', true);
+  } finally {
+    botones.forEach((b) => { $(b).disabled = false; });
+    $('url').readOnly = false;
+    $('con-origen').disabled = false;
+    exportando = false;
+  }
+}
+
+/* ---------- Imprimir ---------- */
+// Copia del afiche sin la escala de la vista previa, extendida con fondo para que no queden bordes blancos
+function copiaAfiche(escala, extraX, extraY) {
+  const c = afiche.cloneNode(true);
+  c.removeAttribute('id');
+  c.removeAttribute('role');
+  c.classList.add('extendido');
+  c.style.transform = 'scale(' + escala + ')';
+  c.style.setProperty('--extra-x', extraX + 'px');
+  c.style.setProperty('--extra-y', extraY + 'px');
+  return c;
+}
+
+function linea(x, y, w, h) { return `<i class="corte" style="left:${x}mm;top:${y}mm;width:${w}mm;height:${h}mm"></i>`; }
+// Marcas de corte en las esquinas, separadas 3 mm del borde (el sangrado)
+function marcasCorte(x, y, w, h) {
+  const g = 0.12; const ini = 3; const largo = 6;
+  let html = '';
+  [[x, y], [x + w, y], [x, y + h], [x + w, y + h]].forEach(([cx, cy], i) => {
+    const izq = i % 2 === 0;
+    const arriba = i < 2;
+    html += linea(izq ? cx - ini - largo : cx + ini, cy - g / 2, largo, g);
+    html += linea(cx - g / 2, arriba ? cy - ini - largo : cy + ini, g, largo);
+  });
+  return html;
+}
+
+function prepararImpresion(modo) {
+  const cont = $('impresion');
+  cont.innerHTML = '';
+  if (modo === 'dos') {
+    // A4 horizontal: 2 afiches de 10 × 17,8 cm con 3 mm de sangrado y marcas de corte
+    $('estilo-pagina').textContent = '@page { size: A4 landscape; margin: 0; }';
+    const hoja = document.createElement('div');
+    hoja.className = 'hoja dos';
+    const w = 100; const h = w * ALTO / ANCHO; const sep = 24; const s = 3;
+    const escala = (w * MM) / ANCHO;
+    const extra = (s * MM) / escala;   // 3 mm medidos en px del afiche (32,4 px)
+    const y = (210 - h) / 2;
+    let marcas = '';
+    [(297 - (w * 2 + sep)) / 2, (297 - (w * 2 + sep)) / 2 + w + sep].forEach((x) => {
+      const caja = document.createElement('div');
+      caja.className = 'caja';
+      caja.style.cssText = `left:${x - s}mm;top:${y - s}mm;width:${w + s * 2}mm;height:${h + s * 2}mm;background:var(--mg-fondo)`;
+      const copia = copiaAfiche(escala, extra, extra);
+      copia.style.left = s + 'mm';
+      copia.style.top = s + 'mm';
+      caja.appendChild(copia);
+      hoja.appendChild(caja);
+      marcas += marcasCorte(x, y, w, h);
+    });
+    hoja.insertAdjacentHTML('beforeend', marcas);
+    cont.appendChild(hoja);
+  } else {
+    // A4 vertical: el afiche mide 281 mm de alto (8 mm de aire arriba y abajo, que la impresora de casa no alcanza
+    // a pintar) y el fondo oscuro se extiende hasta el borde de la hoja
+    $('estilo-pagina').textContent = '@page { size: A4 portrait; margin: 0; }';
+    const hoja = document.createElement('div');
+    hoja.className = 'hoja a4';
+    const alto = 281;
+    const escala = (alto * MM) / ALTO;
+    const arriba = ((297 - alto) / 2) * MM;            // px CSS
+    const lado = ((210 * MM) - ANCHO * escala) / 2;   // franja a cada lado, en px CSS
+    const caja = document.createElement('div');
+    caja.className = 'caja';
+    caja.style.cssText = 'left:0;top:0;width:210mm;height:297mm';
+    const copia = copiaAfiche(escala, lado / escala, arriba / escala);
+    copia.style.left = lado + 'px';
+    copia.style.top = arriba + 'px';
+    caja.appendChild(copia);
+    hoja.appendChild(caja);
+    cont.appendChild(hoja);
+  }
+  document.documentElement.dataset.impresion = modo;
+}
+
+function imprimir(modo) {
+  modoImpresion = modo;
+  prepararImpresion(modo);
+  window.print();
+}
+
+/* ---------- Imágenes propias ---------- */
+const TIPOS_IMAGEN = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp', svg: 'image/svg+xml' };
+function cambiarImagen(input, tipo) {
+  const archivo = input.files && input.files[0];
+  if (!archivo) return;
+  // Algunos selectores de Windows y Android entregan el archivo sin tipo: se reconoce por la extensión
+  const ext = (archivo.name.match(/\.(png|jpe?g|webp|svg)$/i) || [])[1];
+  const mime = archivo.type || (ext ? TIPOS_IMAGEN[ext.toLowerCase()] : '');
+  if (!/^image\/(png|jpeg|webp|svg\+xml)$/.test(mime)) {
+    mostrarEstado('Ese archivo no es una imagen PNG, JPG, WebP o SVG.', true);
+    input.value = '';
+    return;
+  }
+  const url = URL.createObjectURL(archivo.type ? archivo : new Blob([archivo], { type: mime }));
+  // Se prueba antes de usarla (se decodifica completa): si la imagen está dañada no se toca el afiche
+  const prueba = new Image();
+  const aplicar = () => {
+    if (propias[tipo]) URL.revokeObjectURL(propias[tipo]);
+    propias[tipo] = url;
+    const img = afiche.querySelector('[data-imagen="' + tipo + '"]');
+    img.src = url;
+    img.classList.toggle('sin-alfa', mime === 'image/jpeg');   // los JPG no tienen transparencia
+    if (tipo === 'vehiculo') afiche.classList.add('auto-propio');
+    $('btn-restaurar').hidden = false;
+    mostrarEstado('Imagen cambiada. Si se ve con un recuadro, usa una imagen sin fondo o con fondo negro.');
+  };
+  const fallar = () => {
+    URL.revokeObjectURL(url);
+    input.value = '';
+    mostrarEstado('No se pudo abrir esa imagen. Prueba con otro archivo PNG o JPG.', true);
+  };
+  prueba.src = url;
+  if (prueba.decode) prueba.decode().then(aplicar, fallar);
+  else { prueba.onload = aplicar; prueba.onerror = fallar; }
+}
+
+function restaurarImagenes() {
+  ['logo', 'vehiculo'].forEach((tipo) => {
+    const img = afiche.querySelector('[data-imagen="' + tipo + '"]');
+    img.src = originales[tipo];
+    img.classList.remove('sin-alfa');
+    if (propias[tipo]) URL.revokeObjectURL(propias[tipo]);
+    delete propias[tipo];
+  });
+  afiche.classList.remove('auto-propio');
+  $('archivo-vehiculo').value = '';
+  $('archivo-logo').value = '';
+  $('btn-restaurar').hidden = true;
+  mostrarEstado('Imágenes originales.');
+}
+
+/* ---------- Inicio ---------- */
+afiche.querySelectorAll('[data-imagen]').forEach((img) => { originales[img.dataset.imagen] = img.src; });
+pintarTextos();
+
+$('url').addEventListener('input', actualizar);
+$('con-origen').addEventListener('change', actualizar);
+$('btn-png').addEventListener('click', () => exportar('normal'));
+$('btn-png-2x').addEventListener('click', () => exportar('alta'));
+$('btn-png-historia').addEventListener('click', () => exportar('historia'));
+$('btn-png-imprenta').addEventListener('click', () => exportar('imprenta'));
+$('btn-imprimir-a4').addEventListener('click', () => imprimir('a4'));
+$('btn-imprimir-2').addEventListener('click', () => imprimir('dos'));
+$('btn-qr-png').addEventListener('click', () => {
+  if (qrActual && urlActual) descargarCanvas(qrACanvas(qrActual, 2000), 'qr-concurso-' + NOMBRE.replace(/^afiche-/, '') + '.png');
+});
+$('btn-qr-svg').addEventListener('click', () => {
+  if (!qrActual || !urlActual) return;
+  descargarBlob(new Blob([qrASVG(qrActual, 1000)], { type: 'image/svg+xml' }), 'qr-concurso-' + NOMBRE.replace(/^afiche-/, '') + '.svg');
+});
+$('archivo-vehiculo').addEventListener('change', (e) => cambiarImagen(e.target, 'vehiculo'));
+$('archivo-logo').addEventListener('change', (e) => cambiarImagen(e.target, 'logo'));
+$('btn-restaurar').addEventListener('click', restaurarImagenes);
+// Antes de imprimir (botones, Ctrl+P o menú) las copias se arman de nuevo con el QR de ese momento
+window.addEventListener('beforeprint', () => prepararImpresion(modoImpresion || 'a4'));
+window.addEventListener('afterprint', () => { modoImpresion = null; $('impresion').innerHTML = ''; });
+window.addEventListener('resize', ajustarVista);
+if (window.ResizeObserver) new ResizeObserver(ajustarVista).observe($('vista'));
+
+// Si esta herramienta está publicada junto al concurso, propone esa dirección (la carpeta de arriba de /admin/)
+const vecina = new URL('../', location.href);
+$('url').value = /^https?:$/.test(location.protocol) && !LOCAL.test(location.hostname) ? vecina.href : CONFIG.urlConcurso;
+actualizar();
+ajustarVista();
+// El pie se mide con las fuentes de marca: se vuelve a calcular cuando terminan de cargar
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(pintarPie);
+</script>
+</body>
+</html>
