@@ -24,6 +24,12 @@
   --mg-precio-2: #a22e21;
   --mg-wa-1: #23cc66;        /* botón WhatsApp (degradado) */
   --mg-wa-2: #13917b;
+  /* Variantes accesibles para la web (contraste WCAG AA sobre fondo oscuro) */
+  --mg-texto-3: #98a4b5;       /* texto secundario/letra chica sobre --mg-panel (6:1) */
+  --mg-rojo-claro: #ff8a78;    /* mensajes de error y bordes de error (6.9:1 sobre --mg-panel) */
+  --mg-rojo-acento: #ff6650;   /* palabras destacadas en rojo en texto chico (5.4:1 sobre --mg-panel, 6.3:1 sobre --mg-fondo) */
+  --mg-wa-texto-1: #15834b;    /* botón WhatsApp con texto blanco (4.9:1) */
+  --mg-wa-texto-2: #0e6a5d;
   /* Tipografías */
   --mg-f-marca: 'Audiowide', 'Orbitron', system-ui, sans-serif;   /* logotipo, títulos cortos, precio */
   --mg-f-titular: 'Orbitron', 'Audiowide', system-ui, sans-serif; /* titulares grandes */

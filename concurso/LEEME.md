@@ -36,6 +36,8 @@ Abre `index.html` con cualquier editor de texto y busca el bloque `CONFIGURACIÓ
 
 Si cambias la fecha de cierre, cámbiala también en `CIERRE` dentro del Apps Script, y en `sorteo` dentro de `admin/qr.html`.
 
+Si cambias `CONFIG.whatsapp`, cambia también el número y el enlace `tel:` del pie en `index.html` (están escritos a mano, no se actualizan solos).
+
 Las bases del concurso se arman solas con estos datos. Para leerlas, abre "Bases del concurso" al final de la página.
 
 ## Paso 3 · Publicarla en tu página (sin tocar el DNS)
