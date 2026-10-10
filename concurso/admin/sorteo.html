@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tómbola · Concurso Maule GPS</title>
+<style>
+  :root {
+    --navy-950: #040f1b;
+    --navy-900: #071a2c;
+    --navy-800: #0c2741;
+    --navy-700: #123556;
+    --verde: #19d27c;
+    --oro: #ffd166;
+    --rojo: #ff6b6b;
+    --texto: #e8f0f7;
+    --gris: #93a6b9;
+    --borde: rgba(255,255,255,.12);
+    --fila: 76px;
+  }
+  @media (max-width: 640px) { :root { --fila: 60px; } }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; color: var(--texto);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background:
+      radial-gradient(900px 500px at 50% -10%, rgba(25,210,124,.18), transparent 60%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, transparent 1px 40px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0 1px, transparent 1px 40px),
+      linear-gradient(180deg, var(--navy-900), var(--navy-950));
+    background-attachment: fixed;
+  }
+  [hidden] { display: none !important; }
+  a { color: var(--verde); }
+  button, input, select { font: inherit; }
+  .envoltura { max-width: 960px; margin: 0 auto; padding: 16px; }
+
+  .banner-ensayo { background: var(--oro); color: #3b2f00; text-align: center; font-weight: 700; font-size: 13px; padding: 6px 12px; border-radius: 8px; margin-bottom: 12px; }
+
+  /* ---------- Panel de preparación ---------- */
+  details.panel { background: rgba(255,255,255,.05); border: 1px solid var(--borde); border-radius: 14px; padding: 4px 16px; margin-bottom: 18px; }
+  details.panel summary { cursor: pointer; padding: 10px 0; font-weight: 700; display: flex; justify-content: space-between; gap: 8px; }
+  details.panel summary span { color: var(--gris); font-weight: 500; }
+  .pestanas { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 14px; }
+  .pestanas button { background: transparent; color: var(--gris); border: 1px solid var(--borde); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+  .pestanas button[aria-selected="true"] { background: var(--texto); color: var(--navy-900); border-color: var(--texto); font-weight: 700; }
+  .fila-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 12px; }
+  .fila-form label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--gris); flex: 1 1 220px; }
+  .fila-form label.corto { flex: 0 0 110px; }
+  .fila-form input[type=text], .fila-form input[type=password], .fila-form input[type=url], .fila-form input[type=number] {
+    background: rgba(0,0,0,.25); border: 1px solid var(--borde); color: var(--texto); border-radius: 10px; padding: 10px 12px; min-height: 44px; width: 100%;
+  }
+  .btn { border: 0; border-radius: 10px; padding: 10px 16px; min-height: 44px; cursor: pointer; font-weight: 700; background: var(--texto); color: var(--navy-900); }
+  .btn.sec { background: transparent; color: var(--texto); border: 1px solid var(--borde); }
+  .btn.peligro { background: transparent; color: var(--rojo); border: 1px solid rgba(255,107,107,.4); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .estado-carga { font-size: 14px; color: var(--gris); margin: 0 0 12px; }
+  .estado-carga.error { color: var(--rojo); }
+  .estado-carga b { color: var(--texto); }
+  .check { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; color: var(--gris); cursor: pointer; }
+  .check input { width: 18px; height: 18px; accent-color: var(--verde); }
+  .tabla-participantes { max-height: 260px; overflow: auto; border: 1px solid var(--borde); border-radius: 10px; margin-bottom: 14px; font-size: 13px; }
+  .tabla-participantes table { width: 100%; border-collapse: collapse; }
+  .tabla-participantes th, .tabla-participantes td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--borde); white-space: nowrap; }
+  .tabla-participantes th { position: sticky; top: 0; background: var(--navy-800); }
+
+  /* ---------- Escenario ---------- */
+  .escenario { text-align: center; padding: 8px 0 24px; }
+  .marca { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; letter-spacing: .04em; color: var(--verde); text-transform: uppercase; font-size: 14px; }
+  .marca svg { width: 20px; height: 20px; }
+  .escenario h1 { font-size: clamp(28px, 6vw, 52px); line-height: 1.05; margin: 10px 0 8px; letter-spacing: -.02em; }
+  .subtitulo { color: var(--gris); margin: 0 0 22px; font-size: clamp(15px, 2.4vw, 19px); }
+  .subtitulo b { color: var(--texto); }
+
+  .tombola {
+    position: relative; height: calc(var(--fila) * 3); overflow: hidden;
+    border-radius: 20px; border: 2px solid var(--borde);
+    background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(255,255,255,.04) 50%, rgba(0,0,0,.35));
+    max-width: 720px; margin: 0 auto;
+    box-shadow: inset 0 0 40px rgba(0,0,0,.45), 0 20px 60px rgba(0,0,0,.35);
+  }
+  .tombola::before, .tombola::after { content: ""; position: absolute; left: 0; right: 0; height: var(--fila); z-index: 2; pointer-events: none; }
+  .tombola::before { top: 0; background: linear-gradient(180deg, var(--navy-950), transparent); }
+  .tombola::after { bottom: 0; background: linear-gradient(0deg, var(--navy-950), transparent); }
+  .marcador { position: absolute; left: 10px; right: 10px; top: var(--fila); height: var(--fila); border-radius: 14px; border: 2px solid var(--verde); box-shadow: 0 0 0 4px rgba(25,210,124,.15), 0 0 30px rgba(25,210,124,.25); z-index: 1; pointer-events: none; }
+  .carrete { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
+  .fila { height: var(--fila); display: flex; flex-direction: column; justify-content: center; padding: 0 24px; overflow: hidden; }
+  .fila b { font-size: calc(var(--fila) * .38); line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fila span { font-size: calc(var(--fila) * .2); color: var(--gris); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .btn-girar {
+    margin: 26px auto 0; display: block; min-width: min(360px, 100%); min-height: 64px; padding: 0 28px;
+    border: 0; border-radius: 18px; cursor: pointer;
+    background: var(--verde); color: var(--navy-900); font-size: 22px; font-weight: 850; letter-spacing: .01em;
+    box-shadow: 0 10px 30px rgba(25,210,124,.35); transition: transform .1s, filter .2s;
+  }
+  .btn-girar:active { transform: scale(.98); }
+  .btn-girar:disabled { filter: grayscale(.8) brightness(.7); cursor: not-allowed; box-shadow: none; }
+  .ayuda-girar { color: var(--gris); font-size: 14px; margin: 10px 0 0; min-height: 20px; }
+
+  /* ---------- Resultado ---------- */
+  .resultado {
+    max-width: 720px; margin: 26px auto 0; padding: 22px 20px; border-radius: 20px;
+    background: linear-gradient(160deg, rgba(255,209,102,.16), rgba(255,255,255,.04));
+    border: 1px solid rgba(255,209,102,.45); animation: aparecer .5s ease-out;
+  }
+  @keyframes aparecer { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
+  .rol { margin: 0; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--oro); font-size: 15px; }
+  .resultado h2 { font-size: clamp(30px, 6.5vw, 56px); line-height: 1.05; margin: 8px 0; letter-spacing: -.02em; }
+  .datos-ganador { color: var(--gris); font-size: clamp(15px, 2.4vw, 19px); margin: 0 0 18px; }
+  .datos-ganador b { color: var(--texto); }
+  .acciones { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .acciones a, .acciones button { text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .btn.ok { background: var(--verde); color: var(--navy-900); }
+  .anular { display: inline-flex; gap: 6px; }
+  .anular select { background: rgba(0,0,0,.3); color: var(--texto); border: 1px solid var(--borde); border-radius: 10px; padding: 0 10px; min-height: 44px; }
+
+  /* ---------- Historial ---------- */
+  .historial { max-width: 720px; margin: 26px auto 0; text-align: left; }
+  .historial h3 { font-size: 14px; text-transform: uppercase; letter-spacing: .08em; color: var(--gris); margin: 0 0 10px; }
+  .historial ol { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  .historial li { display: grid; grid-template-columns: 110px 1fr auto; gap: 10px; align-items: center; background: rgba(255,255,255,.05); border: 1px solid var(--borde); border-radius: 12px; padding: 10px 14px; }
+  .historial li.anulado { opacity: .6; }
+  .historial li.anulado .h-nombre { text-decoration: line-through; }
+  .h-rol { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--oro); }
+  .h-nombre b { display: block; }
+  .h-nombre span { color: var(--gris); font-size: 13px; }
+  .insignia { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+  .insignia.confirmado { background: rgba(25,210,124,.18); color: var(--verde); }
+  .insignia.anulado { background: rgba(255,107,107,.15); color: var(--rojo); }
+  .insignia.pendiente { background: rgba(255,209,102,.15); color: var(--oro); }
+  .pie { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+  @media (max-width: 520px) {
+    .historial li { grid-template-columns: 1fr auto; }
+    .h-rol { grid-column: 1 / -1; }
+  }
+
+  #confeti { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
+  @media (prefers-reduced-motion: reduce) { .resultado { animation: none; } }
+</style>
+</head>
+<body>
+<canvas id="confeti" aria-hidden="true"></canvas>
+<div class="envoltura">
+
+  <div class="banner-ensayo" id="banner-ensayo" hidden>ENSAYO · Estás usando participantes de ejemplo, no los reales.</div>
+
+  <details class="panel" id="panel" open>
+    <summary>Preparación <span id="resumen-panel">Carga a los participantes</span></summary>
+
+    <div class="pestanas" role="tablist">
+      <button type="button" role="tab" aria-selected="true" data-pestana="sheets">Desde Google Sheets</button>
+      <button type="button" role="tab" aria-selected="false" data-pestana="csv">Archivo CSV</button>
+      <button type="button" role="tab" aria-selected="false" data-pestana="ejemplo">Ensayo</button>
+    </div>
+
+    <div data-contenido="sheets">
+      <div class="fila-form">
+        <label>URL de Google Apps Script (termina en /exec)
+          <input type="url" id="url-script" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+        </label>
+        <label>Clave de la tómbola
+          <input type="password" id="clave" placeholder="La clave CLAVE_ADMIN del script" autocomplete="off">
+        </label>
+        <button type="button" class="btn" id="btn-cargar-sheets">Cargar</button>
+      </div>
+    </div>
+    <div data-contenido="csv" hidden>
+      <p class="estado-carga">En Google Sheets: Archivo › Descargar › Valores separados por comas (.csv). Luego elige el archivo aquí.</p>
+      <div class="fila-form"><input type="file" id="archivo-csv" accept=".csv,text/csv"></div>
+    </div>
+    <div data-contenido="ejemplo" hidden>
+      <p class="estado-carga">Carga 60 participantes inventados para practicar el sorteo antes del en vivo.</p>
+      <div class="fila-form"><button type="button" class="btn sec" id="btn-ejemplo">Cargar datos de ensayo</button></div>
+    </div>
+
+    <p class="estado-carga" id="estado-carga" role="status"></p>
+
+    <div class="fila-form">
+      <label class="corto">Ganadores <input type="number" id="n-ganadores" min="1" max="10" value="1"></label>
+      <label class="corto">Suplentes <input type="number" id="n-suplentes" min="0" max="10" value="2"></label>
+      <label class="check" style="flex:0 0 auto"><input type="checkbox" id="sonido" checked> Sonido</label>
+      <label class="check" style="flex:0 0 auto"><input type="checkbox" id="ver-lista"> Ver lista</label>
+    </div>
+    <div class="tabla-participantes" id="tabla" hidden></div>
+  </details>
+
+  <section class="escenario">
+    <div class="marca">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+      <span id="marca-nombre">Maule GPS</span>
+    </div>
+    <h1 id="titulo">Sorteo instalación GPS gratis</h1>
+    <p class="subtitulo" id="subtitulo">Carga a los participantes para comenzar</p>
+
+    <div class="tombola" aria-hidden="true">
+      <div class="marcador"></div>
+      <div class="carrete" id="carrete"></div>
+    </div>
+
+    <button type="button" class="btn-girar" id="btn-girar" disabled>Sortear</button>
+    <p class="ayuda-girar" id="ayuda-girar"></p>
+
+    <div class="resultado" id="resultado" hidden aria-live="polite">
+      <p class="rol" id="r-rol">Ganador/a</p>
+      <h2 id="r-nombre"></h2>
+      <p class="datos-ganador" id="r-datos"></p>
+      <div class="acciones">
+        <a class="btn sec" id="r-instagram" href="#" target="_blank" rel="noopener">Ver su Instagram</a>
+        <a class="btn sec" id="r-whatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a>
+        <button type="button" class="btn ok" id="r-confirmar">Confirmar</button>
+        <span class="anular">
+          <select id="r-motivo" aria-label="Motivo para anular">
+            <option>No sigue la cuenta</option>
+            <option>Datos falsos o repetidos</option>
+            <option>Fuera de la zona</option>
+            <option>Otro motivo</option>
+          </select>
+          <button type="button" class="btn peligro" id="r-anular">Anular</button>
+        </span>
+      </div>
+    </div>
+
+    <div class="historial" id="historial" hidden>
+      <h3>Resultados</h3>
+      <ol id="lista-resultados"></ol>
+    </div>
+
+    <div class="pie">
+      <button type="button" class="btn sec" id="btn-acta" disabled>Descargar acta del sorteo</button>
+      <button type="button" class="btn peligro" id="btn-reiniciar">Reiniciar sorteo</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN
+   ===================================================================== */
+const CONFIG = {
+  negocio: 'Maule GPS',
+  instagram: 'maulegps',
+  titulo: 'Sorteo instalación GPS gratis',
+  urlScript: '',          // opcional: la misma URL de index.html, así no hay que pegarla
+  ganadores: 1,
+  suplentes: 2,
+  // Mensaje para escribirle al ganador. {nombre} se reemplaza por su primer nombre.
+  mensajeWhatsApp: 'hola {nombre}, le escribo de Maule GPS. Salió sorteado/a en el concurso de Instagram por la instalación de GPS gratis, felicitaciones! Me avisa qué día y hora le acomoda para coordinar la instalación. Estaré atento',
+};
+/* ===================================================================== */
+
+const $ = (id) => document.getElementById(id);
+const CLAVE_LOCAL = 'tombola-' + CONFIG.instagram + '-v1';
+const reduceMovimiento = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let estado = {
+  participantes: [],     // [{id, numero, nombre, telefono, instagram, comuna}]
+  duplicados: 0,
+  fuente: '',
+  ensayo: false,
+  resultados: [],        // [{id, rol, estado: 'pendiente'|'confirmado'|'anulado', motivo, hora}]
+  ganadores: CONFIG.ganadores,
+  suplentes: CONFIG.suplentes,
+};
+let girando = false;
+
+/* ---------- Utilidades ---------- */
+function guardar() { try { localStorage.setItem(CLAVE_LOCAL, JSON.stringify(estado)); } catch (e) { /* sin almacenamiento */ } }
+function recuperar() { try { return JSON.parse(localStorage.getItem(CLAVE_LOCAL)); } catch (e) { return null; } }
+function leerPref(k) { try { return localStorage.getItem(CLAVE_LOCAL + '-' + k); } catch (e) { return null; } }
+function guardarPref(k, v) { try { localStorage.setItem(CLAVE_LOCAL + '-' + k, v); } catch (e) { /* sin almacenamiento */ } }
+
+/** Entero al azar en [0, max) con crypto (sin sesgo). */
+function enteroAleatorio(max) {
+  const limite = Math.floor(0x100000000 / max) * max;
+  const buf = new Uint32Array(1);
+  do { crypto.getRandomValues(buf); } while (buf[0] >= limite);
+  return buf[0] % max;
+}
+
+function soloDigitos(t) { return String(t || '').replace(/\D/g, ''); }
+function normalizarTelefono(t) {
+  let d = soloDigitos(t);
+  if (d.length === 11 && d.startsWith('56')) d = d.slice(2);
+  if (d.length === 8) d = '9' + d;
+  return d;
+}
+function normalizarInstagram(t) {
+  return String(t || '').trim().toLowerCase()
+    .replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/[/?#].*$/, '').replace(/^@+/, '');
+}
+function telefonoOculto(t) {
+  const d = normalizarTelefono(t);
+  return d.length >= 4 ? '+56 9 •••• ' + d.slice(-4) : '';
+}
+function numeroTexto(n) { return n ? 'N° ' + String(n).padStart(3, '0') : ''; }
+function hora(iso) { return new Date(iso).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
+function porId(id) { return estado.participantes.find((p) => p.id === id); }
+
+/* ---------- Carga de participantes ---------- */
+function cargarLista(lista, fuente, ensayo) {
+  const vistos = { tel: new Set(), ig: new Set() };
+  const limpios = [];
+  let duplicados = 0;
+  lista.forEach((p) => {
+    const nombre = String(p.nombre || '').trim();
+    if (!nombre) return;
+    const tel = normalizarTelefono(p.telefono);
+    const ig = normalizarInstagram(p.instagram);
+    if ((tel && vistos.tel.has(tel)) || (ig && vistos.ig.has(ig))) { duplicados++; return; }
+    if (tel) vistos.tel.add(tel);
+    if (ig) vistos.ig.add(ig);
+    limpios.push({
+      id: limpios.length + 1,
+      numero: Number(p.numero) || limpios.length + 1,
+      nombre,
+      telefono: String(p.telefono || ''),
+      instagram: ig,
+      comuna: String(p.comuna || '').trim(),
+    });
+  });
+  if (!limpios.length) { mostrarCarga('No se encontraron participantes en esos datos.', true); return; }
+  if (estado.resultados.length && !confirm('Ya hay resultados en esta tómbola. ¿Cargar la nueva lista y borrar esos resultados?')) return;
+  estado = Object.assign(estado, { participantes: limpios, duplicados, fuente, ensayo: !!ensayo, resultados: [] });
+  guardar();
+  pintarTodo();
+  rellenarCarrete();
+  $('panel').open = false;
+}
+
+function mostrarCarga(texto, error) {
+  const el = $('estado-carga');
+  el.textContent = texto;
+  el.classList.toggle('error', !!error);
+}
+
+async function cargarDesdeSheets() {
+  const url = $('url-script').value.trim();
+  const clave = $('clave').value;
+  if (!/^https:\/\/script\.google(usercontent)?\.com\//.test(url)) { mostrarCarga('Pega la URL de Google Apps Script (empieza con https://script.google.com/).', true); return; }
+  if (!clave) { mostrarCarga('Escribe la clave de la tómbola.', true); return; }
+  guardarPref('url', url);
+  const boton = $('btn-cargar-sheets');
+  boton.disabled = true;
+  mostrarCarga('Cargando…');
+  try {
+    const res = await fetch(url + (url.includes('?') ? '&' : '?') + 'accion=participantes&clave=' + encodeURIComponent(clave));
+    const r = await res.json();
+    if (!r.ok) throw new Error(r.error || 'Error');
+    cargarLista(r.participantes || [], 'Google Sheets', false);
+  } catch (e) {
+    mostrarCarga('No se pudo cargar: ' + (e.message === 'Clave incorrecta' ? 'la clave no coincide con CLAVE_ADMIN del script.' : 'revisa la URL y tu conexión.'), true);
+  } finally {
+    boton.disabled = false;
+  }
+}
+
+function parsearCSV(texto) {
+  const filas = [];
+  let fila = [], campo = '', comillas = false;
+  texto = texto.replace(/^﻿/, '');
+  for (let i = 0; i < texto.length; i++) {
+    const c = texto[i];
+    if (comillas) {
+      if (c === '"' && texto[i + 1] === '"') { campo += '"'; i++; }
+      else if (c === '"') comillas = false;
+      else campo += c;
+    } else if (c === '"') comillas = true;
+    else if (c === ',' || c === ';') { fila.push(campo); campo = ''; }
+    else if (c === '\n' || c === '\r') {
+      if (c === '\r' && texto[i + 1] === '\n') i++;
+      fila.push(campo); filas.push(fila); fila = []; campo = '';
+    } else campo += c;
+  }
+  if (campo || fila.length) { fila.push(campo); filas.push(fila); }
+  return filas.filter((f) => f.some((v) => v.trim()));
+}
+
+function cargarCSV(archivo) {
+  const lector = new FileReader();
+  lector.onload = () => {
+    const filas = parsearCSV(String(lector.result));
+    if (filas.length < 2) { mostrarCarga('El archivo no tiene filas.', true); return; }
+    const sinTilde = (t) => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+    const enc = filas[0].map(sinTilde);
+    // Nombres cortos deben coincidir exacto ("n" no debe confundirse con "nombre")
+    const col = (...nombres) => enc.findIndex((h) => nombres.some((n) => h === n || (n.length >= 5 && h.startsWith(n))));
+    const iNum = col('n°', 'nº', 'n', 'numero'), iNom = col('nombre'), iTel = col('whatsapp', 'telefono', 'celular'),
+      iIg = col('instagram'), iCom = col('comuna');
+    if (iNom < 0) { mostrarCarga('No encontré la columna "Nombre" en el archivo.', true); return; }
+    const lista = filas.slice(1).map((f) => ({
+      numero: iNum >= 0 ? f[iNum] : '', nombre: f[iNom], telefono: iTel >= 0 ? f[iTel] : '',
+      instagram: iIg >= 0 ? f[iIg] : '', comuna: iCom >= 0 ? f[iCom] : '',
+    }));
+    cargarLista(lista, 'archivo ' + archivo.name, false);
+  };
+  lector.readAsText(archivo);
+}
+
+function datosEnsayo() {
+  const nombres = ['Camila', 'Matías', 'Valentina', 'Benjamín', 'Javiera', 'Vicente', 'Catalina', 'Joaquín', 'Antonia', 'Tomás', 'Fernanda', 'Diego', 'Constanza', 'Felipe', 'Daniela', 'Cristóbal', 'Francisca', 'Ignacio', 'Isidora', 'Sebastián'];
+  const apellidos = ['González', 'Muñoz', 'Rojas', 'Díaz', 'Pérez', 'Soto', 'Contreras', 'Silva', 'Martínez', 'Sepúlveda', 'Morales', 'Rodríguez', 'López', 'Fuentes', 'Hernández', 'Torres', 'Araya', 'Flores', 'Espinoza', 'Valenzuela'];
+  const comunas = ['Talca', 'Curicó', 'Linares', 'Constitución', 'Maule', 'San Clemente', 'Molina', 'Cauquenes', 'San Javier', 'Parral'];
+  const lista = [];
+  for (let i = 1; i <= 60; i++) {
+    const n = nombres[enteroAleatorio(nombres.length)], a = apellidos[enteroAleatorio(apellidos.length)];
+    lista.push({
+      numero: i, nombre: n + ' ' + a,
+      telefono: '+56 9 ' + String(10000000 + i * 137911).slice(0, 4) + ' ' + String(1000 + i * 71).slice(-4),
+      instagram: (n + '.' + a + i).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(),
+      comuna: comunas[enteroAleatorio(comunas.length)],
+    });
+  }
+  cargarLista(lista, 'datos de ensayo', true);
+}
+
+/* ---------- Roles y estado del sorteo ---------- */
+function rolSiguiente() {
+  const vigentes = estado.resultados.filter((r) => r.estado !== 'anulado').length;
+  if (vigentes < estado.ganadores) return estado.ganadores === 1 ? 'Ganador/a' : 'Ganador/a ' + (vigentes + 1);
+  const s = vigentes - estado.ganadores + 1;
+  return s <= estado.suplentes ? 'Suplente ' + s : null;
+}
+function pendiente() { return estado.resultados.find((r) => r.estado === 'pendiente'); }
+function disponibles() {
+  const usados = new Set(estado.resultados.map((r) => r.id));
+  return estado.participantes.filter((p) => !usados.has(p.id));
+}
+
+/* ---------- Pintar ---------- */
+function pintarTodo() {
+  const total = estado.participantes.length;
+  $('banner-ensayo').hidden = !estado.ensayo;
+  $('n-ganadores').value = estado.ganadores;
+  $('n-suplentes').value = estado.suplentes;
+
+  if (total) {
+    mostrarCarga('');
+    $('estado-carga').innerHTML = '';
+    const b = document.createElement('b'); b.textContent = total + ' participantes válidos';
+    $('estado-carga').append(b, ' cargados desde ' + estado.fuente + (estado.duplicados ? ` · ${estado.duplicados} repetidos quitados` : '') + '.');
+    $('resumen-panel').textContent = total + ' participantes';
+    $('subtitulo').innerHTML = '';
+    $('subtitulo').append('Entre ', Object.assign(document.createElement('b'), { textContent: total + ' participantes' }), ' · en vivo por @' + CONFIG.instagram);
+  } else {
+    $('resumen-panel').textContent = 'Carga a los participantes';
+    $('subtitulo').textContent = 'Carga a los participantes para comenzar';
+  }
+
+  pintarTabla();
+  pintarResultado();
+  pintarHistorial();
+  pintarBoton();
+  $('btn-acta').disabled = !estado.resultados.length;
+}
+
+function pintarTabla() {
+  const cont = $('tabla');
+  cont.hidden = !$('ver-lista').checked || !estado.participantes.length;
+  if (cont.hidden) return;
+  const tabla = document.createElement('table');
+  tabla.innerHTML = '<thead><tr><th>N°</th><th>Nombre</th><th>Instagram</th><th>Comuna</th><th>WhatsApp</th></tr></thead>';
+  const cuerpo = document.createElement('tbody');
+  estado.participantes.forEach((p) => {
+    const tr = document.createElement('tr');
+    [numeroTexto(p.numero), p.nombre, p.instagram ? '@' + p.instagram : '', p.comuna, telefonoOculto(p.telefono)].forEach((v) => {
+      const td = document.createElement('td'); td.textContent = v; tr.appendChild(td);
+    });
+    cuerpo.appendChild(tr);
+  });
+  tabla.appendChild(cuerpo);
+  cont.replaceChildren(tabla);
+}
+
+function pintarBoton() {
+  const boton = $('btn-girar');
+  const ayuda = $('ayuda-girar');
+  const rol = rolSiguiente();
+  const quedan = disponibles().length;
+  if (!estado.participantes.length) { boton.disabled = true; boton.textContent = 'Sortear'; ayuda.textContent = 'Primero carga a los participantes en "Preparación".'; return; }
+  if (girando) { boton.disabled = true; ayuda.textContent = ''; return; }
+  if (pendiente()) { boton.disabled = true; ayuda.textContent = 'Confirma o anula el resultado para seguir.'; return; }
+  if (!rol) { boton.disabled = true; boton.textContent = 'Sorteo completo'; ayuda.textContent = 'Descarga el acta para guardar el resultado.'; return; }
+  if (!quedan) { boton.disabled = true; boton.textContent = 'No quedan participantes'; ayuda.textContent = ''; return; }
+  boton.disabled = false;
+  boton.textContent = 'Sortear ' + rol.toLowerCase();
+  ayuda.textContent = quedan + ' en la tómbola';
+}
+
+function pintarResultado() {
+  const r = pendiente() || null;
+  $('resultado').hidden = !r;
+  if (!r) return;
+  const p = porId(r.id);
+  $('r-rol').textContent = r.rol;
+  $('r-nombre').textContent = p.nombre;
+  $('r-datos').innerHTML = '';
+  const partes = [];
+  if (p.instagram) partes.push(Object.assign(document.createElement('b'), { textContent: '@' + p.instagram }));
+  if (p.comuna) partes.push(p.comuna);
+  if (p.numero) partes.push(numeroTexto(p.numero));
+  if (telefonoOculto(p.telefono)) partes.push(telefonoOculto(p.telefono));
+  partes.forEach((x, i) => { if (i) $('r-datos').append(' · '); $('r-datos').append(x); });
+
+  $('r-instagram').href = 'https://www.instagram.com/' + encodeURIComponent(p.instagram) + '/';
+  $('r-instagram').hidden = !p.instagram;
+  const tel = normalizarTelefono(p.telefono);
+  $('r-whatsapp').hidden = tel.length !== 9;
+  $('r-whatsapp').href = 'https://wa.me/56' + tel + '?text=' + encodeURIComponent(CONFIG.mensajeWhatsApp.replace('{nombre}', p.nombre.split(' ')[0]));
+}
+
+function pintarHistorial() {
+  const ol = $('lista-resultados');
+  ol.replaceChildren();
+  $('historial').hidden = !estado.resultados.length;
+  estado.resultados.forEach((r) => {
+    const p = porId(r.id);
+    const li = document.createElement('li');
+    li.className = r.estado;
+    const rol = Object.assign(document.createElement('span'), { className: 'h-rol', textContent: r.rol });
+    const nom = document.createElement('span'); nom.className = 'h-nombre';
+    nom.append(Object.assign(document.createElement('b'), { textContent: p.nombre }),
+      Object.assign(document.createElement('span'), { textContent: [p.instagram ? '@' + p.instagram : '', p.comuna, hora(r.hora)].filter(Boolean).join(' · ') }));
+    const ins = Object.assign(document.createElement('span'), {
+      className: 'insignia ' + r.estado,
+      textContent: r.estado === 'anulado' ? 'Anulado: ' + r.motivo : r.estado === 'confirmado' ? 'Confirmado' : 'Por confirmar',
+    });
+    li.append(rol, nom, ins);
+    ol.appendChild(li);
+  });
+}
+
+/* ---------- Carrete (la tómbola) ---------- */
+function crearFila(p) {
+  const div = document.createElement('div');
+  div.className = 'fila';
+  div.append(Object.assign(document.createElement('b'), { textContent: p ? p.nombre : '· · ·' }),
+    Object.assign(document.createElement('span'), { textContent: p ? [p.instagram ? '@' + p.instagram : '', p.comuna].filter(Boolean).join(' · ') : '' }));
+  return div;
+}
+function alturaFila() { return $('carrete').firstElementChild ? $('carrete').firstElementChild.offsetHeight : 76; }
+
+function rellenarCarrete(centro) {
+  const carrete = $('carrete');
+  const pool = disponibles();
+  const azar = () => (pool.length ? pool[enteroAleatorio(pool.length)] : null);
+  carrete.style.transition = 'none';
+  carrete.style.transform = 'translateY(0)';
+  carrete.replaceChildren(crearFila(azar()), crearFila(centro || azar()), crearFila(azar()));
+}
+
+function girar() {
+  const rol = rolSiguiente();
+  const pool = disponibles();
+  if (girando || !rol || !pool.length || pendiente()) return;
+  girando = true;
+  pintarBoton();
+  sonidos.preparar();
+
+  const ganador = pool[enteroAleatorio(pool.length)];
+  // Vecinos del ganador: distintos a él y entre sí (si hay suficientes nombres)
+  const otro = (...excluir) => {
+    const resto = pool.filter((p) => !excluir.includes(p));
+    return resto.length ? resto[enteroAleatorio(resto.length)] : pool[enteroAleatorio(pool.length)];
+  };
+  const relleno = reduceMovimiento ? 6 : 46;
+  const filas = [];
+  for (let i = 0; i < relleno - 1; i++) filas.push(pool[enteroAleatorio(pool.length)]);
+  const arriba = otro(ganador);
+  filas.push(arriba, ganador, otro(ganador, arriba));
+
+  const carrete = $('carrete');
+  const actual = carrete.children[1] ? carrete.children[1].cloneNode(true) : crearFila(null);
+  carrete.style.transition = 'none';
+  carrete.style.transform = 'translateY(0)';
+  carrete.replaceChildren(crearFila(null), actual, ...filas.map(crearFila));
+  const h = alturaFila();
+  void carrete.offsetHeight; // fuerza el reflow antes de animar
+
+  const duracion = reduceMovimiento ? 900 : 6500;
+  const destino = -(relleno + 1) * h;   // deja al ganador en la fila del medio
+  carrete.style.transition = `transform ${duracion}ms cubic-bezier(.08,.6,.12,1)`;
+  carrete.style.transform = `translateY(${destino}px)`;
+
+  let ultimaFila = 0;
+  const tic = () => {
+    if (!girando) return;
+    const m = new DOMMatrixReadOnly(getComputedStyle(carrete).transform);
+    const fila = Math.floor(-m.m42 / h);
+    if (fila !== ultimaFila) { ultimaFila = fila; sonidos.tic(); }
+    requestAnimationFrame(tic);
+  };
+  requestAnimationFrame(tic);
+
+  let terminado = false;
+  const terminar = () => {
+    if (terminado) return;
+    terminado = true;
+    girando = false;
+    carrete.style.transition = 'none';
+    carrete.replaceChildren(crearFila(filas[relleno - 1]), crearFila(ganador), crearFila(filas[relleno + 1]));
+    carrete.style.transform = 'translateY(0)';
+    estado.resultados.push({ id: ganador.id, rol, estado: 'pendiente', motivo: '', hora: new Date().toISOString() });
+    guardar();
+    pintarTodo();
+    sonidos.fanfarria();
+    confeti();
+    $('resultado').scrollIntoView({ behavior: reduceMovimiento ? 'auto' : 'smooth', block: 'center' });
+  };
+  carrete.addEventListener('transitionend', terminar, { once: true });
+  setTimeout(terminar, duracion + 400); // por si el navegador no avisa
+}
+
+function resolver(nuevoEstado) {
+  const r = pendiente();
+  if (!r) return;
+  r.estado = nuevoEstado;
+  if (nuevoEstado === 'anulado') r.motivo = $('r-motivo').value;
+  guardar();
+  pintarTodo();
+  rellenarCarrete(porId(r.id));
+}
+
+/* ---------- Acta ---------- */
+function descargarActa() {
+  const ahora = new Date();
+  const lineas = [
+    `ACTA DE SORTEO · ${CONFIG.titulo.toUpperCase()}`,
+    `${CONFIG.negocio} · Instagram @${CONFIG.instagram}`,
+    '',
+    'Fecha y hora: ' + ahora.toLocaleString('es-CL', { timeZone: 'America/Santiago' }),
+    'Participantes válidos: ' + estado.participantes.length + (estado.duplicados ? ` (${estado.duplicados} inscripciones repetidas quitadas)` : ''),
+    'Origen de los datos: ' + estado.fuente + (estado.ensayo ? ' (ENSAYO, no válido)' : ''),
+    'Método: selección al azar con el generador criptográfico del navegador (crypto.getRandomValues).',
+    '',
+    'RESULTADOS',
+  ];
+  estado.resultados.forEach((r, i) => {
+    const p = porId(r.id);
+    lineas.push(`${i + 1}. ${r.rol}: ${p.nombre}${p.instagram ? ' (@' + p.instagram + ')' : ''} · ${p.comuna || 's/comuna'} · ${numeroTexto(p.numero)} · ${telefonoOculto(p.telefono)} · ${hora(r.hora)} · ` +
+      (r.estado === 'anulado' ? 'ANULADO (' + r.motivo + ')' : r.estado === 'confirmado' ? 'CONFIRMADO' : 'SIN CONFIRMAR'));
+  });
+  const blob = new Blob([lineas.join('\r\n') + '\r\n'], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'acta-sorteo-' + CONFIG.instagram + '-' + ahora.toISOString().slice(0, 10) + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+/* ---------- Sonido (sin archivos) ---------- */
+const sonidos = (() => {
+  let ctx = null;
+  const activo = () => $('sonido').checked;
+  function nota(frecuencia, inicio, duracion, volumen, tipo) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = tipo || 'sine';
+    o.frequency.value = frecuencia;
+    g.gain.setValueAtTime(volumen, ctx.currentTime + inicio);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + inicio + duracion);
+    o.connect(g).connect(ctx.destination);
+    o.start(ctx.currentTime + inicio);
+    o.stop(ctx.currentTime + inicio + duracion + 0.02);
+  }
+  return {
+    preparar() {
+      if (!activo()) return;
+      try { ctx = ctx || new (window.AudioContext || window.webkitAudioContext)(); if (ctx.state === 'suspended') ctx.resume(); } catch (e) { ctx = null; }
+    },
+    tic() { if (ctx && activo()) nota(1800, 0, 0.03, 0.05, 'square'); },
+    fanfarria() { if (ctx && activo()) [523, 659, 784, 1047].forEach((f, i) => nota(f, i * 0.12, i === 3 ? 0.6 : 0.18, 0.18, 'triangle')); },
+  };
+})();
+
+/* ---------- Confeti ---------- */
+function confeti() {
+  if (reduceMovimiento) return;
+  const canvas = $('confeti');
+  const c = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = innerWidth * dpr; canvas.height = innerHeight * dpr;
+  c.scale(dpr, dpr);
+  const colores = ['#19d27c', '#ffd166', '#ffffff', '#4cc9f0', '#ff6b6b'];
+  const piezas = Array.from({ length: 180 }, () => ({
+    x: innerWidth / 2 + (Math.random() - .5) * 200, y: innerHeight * .45,
+    vx: (Math.random() - .5) * 16, vy: -Math.random() * 16 - 6,
+    r: Math.random() * Math.PI, vr: (Math.random() - .5) * .3,
+    w: 6 + Math.random() * 6, h: 10 + Math.random() * 8, color: colores[Math.floor(Math.random() * colores.length)],
+  }));
+  const inicio = performance.now();
+  (function cuadro(t) {
+    c.clearRect(0, 0, innerWidth, innerHeight);
+    piezas.forEach((p) => {
+      p.vy += .35; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      c.save(); c.translate(p.x, p.y); c.rotate(p.r); c.fillStyle = p.color; c.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); c.restore();
+    });
+    if (t - inicio < 4000) requestAnimationFrame(cuadro);
+    else c.clearRect(0, 0, innerWidth, innerHeight);
+  })(inicio);
+}
+
+/* ---------- Eventos ---------- */
+document.querySelectorAll('[data-pestana]').forEach((b) => b.addEventListener('click', () => {
+  document.querySelectorAll('[data-pestana]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+  document.querySelectorAll('[data-contenido]').forEach((c) => { c.hidden = c.dataset.contenido !== b.dataset.pestana; });
+}));
+$('btn-cargar-sheets').addEventListener('click', cargarDesdeSheets);
+$('archivo-csv').addEventListener('change', (e) => { if (e.target.files[0]) cargarCSV(e.target.files[0]); });
+$('btn-ejemplo').addEventListener('click', datosEnsayo);
+$('btn-girar').addEventListener('click', girar);
+$('r-confirmar').addEventListener('click', () => resolver('confirmado'));
+$('r-anular').addEventListener('click', () => resolver('anulado'));
+$('btn-acta').addEventListener('click', descargarActa);
+$('ver-lista').addEventListener('change', pintarTabla);
+$('n-ganadores').addEventListener('change', (e) => { estado.ganadores = Math.max(1, Math.min(10, Number(e.target.value) || 1)); guardar(); pintarTodo(); });
+$('n-suplentes').addEventListener('change', (e) => { estado.suplentes = Math.max(0, Math.min(10, Number(e.target.value) || 0)); guardar(); pintarTodo(); });
+$('btn-reiniciar').addEventListener('click', () => {
+  if (!estado.resultados.length && !estado.participantes.length) return;
+  if (!confirm('¿Borrar los resultados y volver a sortear desde cero? (La lista de participantes se mantiene)')) return;
+  estado.resultados = [];
+  guardar();
+  pintarTodo();
+  rellenarCarrete();
+});
+
+/* ---------- Inicio ---------- */
+$('marca-nombre').textContent = CONFIG.negocio;
+$('titulo').textContent = CONFIG.titulo;
+document.title = 'Tómbola · ' + CONFIG.negocio;
+$('url-script').value = leerPref('url') || CONFIG.urlScript;
+const guardado = recuperar();
+if (guardado && Array.isArray(guardado.participantes) && guardado.participantes.length) {
+  estado = Object.assign(estado, guardado);
+  $('panel').open = false;
+}
+pintarTodo();
+rellenarCarrete(pendiente() ? porId(pendiente().id) : null);
+</script>
+</body>
+</html>

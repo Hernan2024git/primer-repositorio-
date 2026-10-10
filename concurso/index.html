@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Concurso Maule GPS · Gánate tu instalación GPS gratis</title>
+<meta name="description" content="Participa en la tómbola de Maule GPS y gánate la instalación de tu GPS gratis. Síguenos en Instagram y completa tus datos.">
+<meta name="theme-color" content="#071a2c">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Gánate la instalación de tu GPS gratis · Maule GPS">
+<meta property="og:description" content="Participa en 2 pasos y entra a la tómbola. Región del Maule.">
+<style>
+  :root {
+    --navy-900: #071a2c;
+    --navy-800: #0c2741;
+    --navy-700: #123556;
+    --verde: #19d27c;
+    --verde-texto: #087f48;
+    --texto: #0f1d2b;
+    --gris: #556677;
+    --borde: #d5dee7;
+    --fondo: #eef2f6;
+    --blanco: #ffffff;
+    --error: #c62828;
+    --radio: 16px;
+    --sombra: 0 10px 30px rgba(7, 26, 44, .10);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--texto);
+    background: var(--fondo);
+    line-height: 1.5;
+  }
+  a { color: var(--verde-texto); }
+  [hidden] { display: none !important; }
+
+  .banner-prueba {
+    background: #ffd54f; color: #3b2f00; font-size: 13px; font-weight: 600;
+    text-align: center; padding: 8px 16px;
+  }
+
+  /* ---------- Portada ---------- */
+  .hero {
+    position: relative; overflow: hidden;
+    color: #fff;
+    padding: 28px 20px 92px;
+    background:
+      radial-gradient(600px 300px at 85% -10%, rgba(25, 210, 124, .35), transparent 60%),
+      radial-gradient(500px 260px at -10% 110%, rgba(25, 160, 210, .25), transparent 60%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 36px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 1px, transparent 1px 36px),
+      linear-gradient(160deg, var(--navy-800), var(--navy-900));
+  }
+  .hero-interior { max-width: 520px; margin: 0 auto; position: relative; }
+  .marca { display: flex; align-items: center; gap: 8px; font-weight: 800; letter-spacing: .02em; font-size: 18px; }
+  .marca svg { width: 26px; height: 26px; color: var(--verde); }
+  .eyebrow {
+    display: inline-block; margin: 26px 0 10px; padding: 5px 12px; border-radius: 999px;
+    background: rgba(25, 210, 124, .15); color: #8ff0c0; font-size: 12px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+  }
+  h1 { font-size: clamp(30px, 8.5vw, 42px); line-height: 1.08; margin: 0 0 14px; font-weight: 850; letter-spacing: -.02em; }
+  h1 span { color: var(--verde); }
+  .bajada { margin: 0 0 18px; color: #c9d6e3; font-size: 16px; }
+  .bajada strong { color: #fff; }
+  .premio {
+    display: flex; gap: 12px; align-items: center;
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 14px; padding: 12px 14px; font-size: 14px; color: #dbe6f0;
+  }
+  .premio b { color: #fff; display: block; font-size: 15px; }
+  .premio svg { flex: none; width: 34px; height: 34px; color: #ffd166; }
+
+  .pin-pulso { position: absolute; right: 0; top: -14px; width: 64px; height: 64px; pointer-events: none; opacity: .9; }
+  .pin-pulso::before, .pin-pulso::after {
+    content: ""; position: absolute; left: 50%; bottom: 2px; width: 22px; height: 8px; margin-left: -11px;
+    border-radius: 50%; background: rgba(25,210,124,.5); animation: pulso 2.2s ease-out infinite;
+  }
+  .pin-pulso::after { animation-delay: 1.1s; }
+  .pin-pulso svg { position: absolute; inset: 0; margin: auto; width: 40px; height: 40px; color: var(--verde); filter: drop-shadow(0 6px 10px rgba(0,0,0,.35)); }
+  @keyframes pulso { from { transform: scale(1); opacity: .9; } to { transform: scale(4); opacity: 0; } }
+  @media (max-width: 380px) { .pin-pulso { display: none; } }
+
+  /* ---------- Contenido ---------- */
+  main { max-width: 520px; margin: -64px auto 0; padding: 0 16px 24px; position: relative; }
+  .tarjeta {
+    background: var(--blanco); border-radius: var(--radio); box-shadow: var(--sombra);
+    padding: 22px 18px; margin-bottom: 16px;
+  }
+  .cuenta-regresiva { text-align: center; }
+  .cuenta-regresiva p { margin: 0 0 10px; font-size: 13px; font-weight: 700; color: var(--gris); text-transform: uppercase; letter-spacing: .06em; }
+  .cuenta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .cuenta div { background: var(--fondo); border-radius: 12px; padding: 10px 4px 8px; }
+  .cuenta b { display: block; font-size: 26px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .cuenta small { font-size: 11px; color: var(--gris); text-transform: uppercase; letter-spacing: .05em; }
+  .contador { margin: 12px 0 0; font-size: 14px; color: var(--gris); }
+  .contador b { color: var(--texto); }
+
+  .paso { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px dashed var(--borde); }
+  .num {
+    width: 34px; height: 34px; border-radius: 50%; background: var(--navy-900); color: #fff;
+    display: grid; place-items: center; font-weight: 800; font-size: 16px;
+  }
+  .paso.hecho .num { background: var(--verde); color: var(--navy-900); }
+  h2 { font-size: 19px; line-height: 1.25; margin: 4px 0 4px; }
+  .ayuda { margin: 0 0 14px; font-size: 14px; color: var(--gris); }
+
+  .btn-ig {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; min-height: 52px; border-radius: 12px; text-decoration: none;
+    color: #fff; font-weight: 750; font-size: 16px;
+    background: linear-gradient(45deg, #f58529, #dd2a7b 45%, #8134af 75%, #515bd4);
+  }
+  .btn-ig svg { width: 22px; height: 22px; }
+
+  .campo { margin-bottom: 14px; }
+  .campo label { display: block; font-weight: 650; font-size: 14px; margin-bottom: 6px; }
+  .campo label small { font-weight: 500; color: var(--gris); }
+  .entrada { display: flex; align-items: stretch; border: 1.5px solid var(--borde); border-radius: 12px; background: #fff; transition: border-color .15s, box-shadow .15s; }
+  .entrada:focus-within { border-color: var(--navy-700); box-shadow: 0 0 0 3px rgba(18, 53, 86, .15); }
+  .entrada.invalido { border-color: var(--error); }
+  .prefijo { display: grid; place-items: center; padding: 0 0 0 14px; color: var(--gris); font-weight: 600; font-size: 16px; }
+  input[type=text], input[type=tel], select {
+    flex: 1; min-width: 0; width: 100%; border: 0; outline: 0; background: transparent;
+    font: inherit; font-size: 16px; color: var(--texto); padding: 13px 14px; min-height: 50px;
+    border-radius: 12px; -webkit-appearance: none; appearance: none;
+  }
+  select {
+    background-image: linear-gradient(45deg, transparent 50%, var(--gris) 50%), linear-gradient(135deg, var(--gris) 50%, transparent 50%);
+    background-position: calc(100% - 20px) 22px, calc(100% - 14px) 22px;
+    background-size: 6px 6px; background-repeat: no-repeat; padding-right: 36px;
+  }
+  .msg-error { color: var(--error); font-size: 13px; margin: 6px 0 0; }
+
+  .check { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; margin: 14px 0 0; cursor: pointer; }
+  .check input { flex: none; width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--verde-texto); }
+  .check.opcional { font-size: 14px; color: var(--gris); }
+
+  .btn-principal {
+    width: 100%; min-height: 56px; margin-top: 20px; border: 0; border-radius: 14px; cursor: pointer;
+    background: var(--verde); color: var(--navy-900); font: inherit; font-size: 18px; font-weight: 800;
+    box-shadow: 0 8px 20px rgba(25, 210, 124, .35); transition: transform .1s, filter .15s;
+  }
+  .btn-principal:active { transform: scale(.98); }
+  .btn-principal:disabled { filter: grayscale(.6) opacity(.7); cursor: wait; }
+  .btn-secundario {
+    width: 100%; min-height: 50px; margin-top: 10px; border-radius: 14px; cursor: pointer;
+    background: #fff; border: 1.5px solid var(--borde); color: var(--texto); font: inherit; font-weight: 700; font-size: 16px;
+    display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;
+  }
+  .btn-link { background: none; border: 0; color: var(--gris); font: inherit; font-size: 14px; text-decoration: underline; cursor: pointer; margin-top: 14px; padding: 6px; }
+  .error-general { background: #fdecea; color: var(--error); border-radius: 10px; padding: 10px 12px; font-size: 14px; margin: 16px 0 0; }
+  .oculto { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .letra-chica { font-size: 12px; color: var(--gris); margin: 12px 0 0; text-align: center; }
+
+  .girando { display: inline-block; width: 18px; height: 18px; border: 3px solid rgba(7,26,44,.25); border-top-color: var(--navy-900); border-radius: 50%; animation: girar .8s linear infinite; vertical-align: -3px; margin-right: 8px; }
+  @keyframes girar { to { transform: rotate(360deg); } }
+
+  /* ---------- Éxito / cerrado ---------- */
+  .exito { text-align: center; }
+  .check-grande { width: 64px; height: 64px; margin: 0 auto 10px; border-radius: 50%; background: var(--verde); display: grid; place-items: center; }
+  .check-grande svg { width: 34px; height: 34px; color: var(--navy-900); }
+  .ticket {
+    margin: 16px auto; max-width: 260px; padding: 14px; border-radius: 14px;
+    background: var(--navy-900); color: #fff; position: relative;
+  }
+  .ticket small { display: block; color: #9fb3c8; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+  .ticket b { font-size: 40px; letter-spacing: .04em; font-variant-numeric: tabular-nums; color: var(--verde); }
+  .ticket::before, .ticket::after { content: ""; position: absolute; top: 50%; width: 18px; height: 18px; margin-top: -9px; border-radius: 50%; background: #fff; }
+  .ticket::before { left: -9px; } .ticket::after { right: -9px; }
+  .nota { background: #fff8e1; border-radius: 10px; padding: 10px 12px; font-size: 14px; text-align: left; }
+  .beneficio { background: #e7f9f0; color: #064d2c; border-radius: 10px; padding: 10px 12px; font-size: 14px; font-weight: 600; }
+
+  /* ---------- Beneficios y bases ---------- */
+  .lista-beneficios { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
+  .lista-beneficios li { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; }
+  .lista-beneficios svg { flex: none; width: 22px; height: 22px; color: var(--verde-texto); margin-top: 1px; }
+  details.bases summary { cursor: pointer; font-weight: 750; font-size: 16px; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+  details.bases summary::-webkit-details-marker { display: none; }
+  details.bases summary::after { content: "+"; font-size: 22px; color: var(--gris); }
+  details.bases[open] summary::after { content: "–"; }
+  details.bases ol { padding-left: 20px; margin: 14px 0 0; font-size: 14px; color: #334455; }
+  details.bases li { margin-bottom: 8px; }
+
+  footer { text-align: center; font-size: 13px; color: var(--gris); padding: 8px 16px 36px; }
+  footer a { font-weight: 700; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="banner-prueba" class="banner-prueba" hidden>MODO PRUEBA · Falta conectar Google Sheets: las inscripciones no se están guardando.</div>
+
+<header class="hero">
+  <div class="hero-interior">
+    <div class="marca">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+      <span data-negocio>Maule GPS</span>
+    </div>
+    <div class="pin-pulso" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+    </div>
+    <span class="eyebrow">Concurso · <span data-zona>Región del Maule</span></span>
+    <h1>Gánate la <span>instalación de tu GPS</span> gratis</h1>
+    <p class="bajada">Mira dónde está tu vehículo en tiempo real desde el celular. Participa en 2 pasos y entra a la tómbola del <strong data-fecha-sorteo>domingo 18 de octubre</strong>.</p>
+    <div class="premio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8c-2-4-6-4-6-1.5S9 8 12 8Zm0 0c2-4 6-4 6-1.5S15 8 12 8Z"/></svg>
+      <div><b data-premio>Instalación de GPS a domicilio</b><span data-valor-premio>Valor referencial $85.000</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="tarjeta cuenta-regresiva" id="bloque-cuenta">
+    <p id="texto-cierre">Las inscripciones cierran en</p>
+    <div class="cuenta" role="timer" aria-label="Tiempo restante para participar">
+      <div><b id="cd-d">0</b><small>días</small></div>
+      <div><b id="cd-h">0</b><small>horas</small></div>
+      <div><b id="cd-m">0</b><small>min</small></div>
+      <div><b id="cd-s">0</b><small>seg</small></div>
+    </div>
+    <p class="contador" id="contador" hidden>Ya participan <b id="contador-total">0</b> personas</p>
+  </section>
+
+  <!-- Formulario -->
+  <section class="tarjeta" id="participar">
+    <form id="formulario" novalidate>
+      <div class="paso" id="paso-1">
+        <span class="num" aria-hidden="true">1</span>
+        <div>
+          <h2>Síguenos en Instagram</h2>
+          <p class="ayuda">Es requisito para participar. Lo revisamos en vivo antes de entregar el premio.</p>
+          <a class="btn-ig" id="btn-ig" href="https://www.instagram.com/maulegps/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            Seguir a <span data-ig>@maulegps</span>
+          </a>
+          <label class="check"><input type="checkbox" name="sigue" id="sigue"> <span>Ya sigo a <b data-ig>@maulegps</b></span></label>
+          <p class="msg-error" id="err-sigue" hidden></p>
+        </div>
+      </div>
+
+      <div class="paso" style="border:0;margin:0;padding:0">
+        <span class="num" aria-hidden="true">2</span>
+        <div>
+          <h2>Completa tus datos</h2>
+          <p class="ayuda">Si ganas, te contactamos por WhatsApp.</p>
+
+          <div class="campo">
+            <label for="nombre">Nombre y apellido</label>
+            <div class="entrada"><input type="text" id="nombre" name="nombre" autocomplete="name" maxlength="80" placeholder="Ej: Juan Pérez" required></div>
+            <p class="msg-error" id="err-nombre" hidden></p>
+          </div>
+
+          <div class="campo">
+            <label for="telefono">WhatsApp</label>
+            <div class="entrada"><span class="prefijo">+56</span><input type="tel" id="telefono" name="telefono" autocomplete="tel-national" inputmode="tel" maxlength="16" placeholder="9 1234 5678" required></div>
+            <p class="msg-error" id="err-telefono" hidden></p>
+          </div>
+
+          <div class="campo">
+            <label for="instagram">Tu usuario de Instagram</label>
+            <div class="entrada"><span class="prefijo">@</span><input type="text" id="instagram" name="instagram" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="60" placeholder="tuusuario" required></div>
+            <p class="msg-error" id="err-instagram" hidden></p>
+          </div>
+
+          <div class="campo">
+            <label for="comuna">Comuna</label>
+            <div class="entrada"><select id="comuna" name="comuna" required><option value="">Elige tu comuna</option></select></div>
+            <p class="msg-error" id="err-comuna" hidden></p>
+          </div>
+
+          <div class="campo">
+            <label for="vehiculo">¿Qué vehículo tienes? <small>(opcional)</small></label>
+            <div class="entrada">
+              <select id="vehiculo" name="vehiculo">
+                <option value="">Elegir</option>
+                <option>Auto</option>
+                <option>Camioneta / SUV</option>
+                <option>Moto</option>
+                <option>Camión</option>
+                <option>Flota de empresa</option>
+                <option>Otro</option>
+              </select>
+            </div>
+          </div>
+
+          <label class="check"><input type="checkbox" name="bases" id="bases-ok"> <span>Soy mayor de 18 años y acepto las <a href="#bases" id="link-bases">bases del concurso</a></span></label>
+          <p class="msg-error" id="err-bases" hidden></p>
+          <label class="check opcional"><input type="checkbox" name="ofertas" id="ofertas"> <span>Quiero recibir ofertas de <span data-negocio>Maule GPS</span> por WhatsApp</span></label>
+
+          <div class="oculto" aria-hidden="true"><label>No llenar <input type="text" name="website" id="website" tabindex="-1" autocomplete="off"></label></div>
+
+          <p class="error-general" id="error-general" role="alert" hidden></p>
+          <button type="submit" class="btn-principal" id="btn-enviar">Quiero participar</button>
+          <p class="letra-chica">Una participación por persona. Tus datos se usan solo para este concurso<span id="txt-ofertas"></span>.</p>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- Inscripción exitosa -->
+  <section class="tarjeta exito" id="listo" hidden tabindex="-1">
+    <div class="check-grande"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h2 id="listo-titulo">¡Listo! Ya estás en la tómbola</h2>
+    <div class="ticket"><small>Tu número de participación</small><b id="listo-numero">N° 000</b></div>
+    <p id="listo-texto">El sorteo es el <b data-fecha-sorteo-larga>domingo 18 de octubre</b> en vivo por Instagram <b data-ig>@maulegps</b>. Si ganas, te escribimos al WhatsApp.</p>
+    <p class="nota"><b>Importante:</b> sigue a <span data-ig>@maulegps</span> hasta el día del sorteo. Si al momento del sorteo no nos sigues, sacamos otro nombre.</p>
+    <p class="beneficio" id="listo-beneficio" hidden></p>
+    <a class="btn-secundario" id="btn-compartir" href="#" target="_blank" rel="noopener">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#25d366" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.4-3.9-4.6-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1 1 2 1.3 2.3 1.4.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.6-.1 1.2Z"/></svg>
+      Invitar a un amigo por WhatsApp
+    </a>
+    <button type="button" class="btn-link" id="btn-otra">Inscribir a otra persona</button>
+  </section>
+
+  <!-- Concurso cerrado -->
+  <section class="tarjeta exito" id="cerrado" hidden>
+    <h2>Las inscripciones cerraron</h2>
+    <p>Gracias por tu interés. El sorteo es el <b data-fecha-sorteo-larga>domingo 18 de octubre</b> en vivo por Instagram <b data-ig>@maulegps</b>.</p>
+    <a class="btn-ig" href="https://www.instagram.com/maulegps/" target="_blank" rel="noopener" data-ig-link>Ver el sorteo en Instagram</a>
+  </section>
+
+  <section class="tarjeta">
+    <h2>Lo que tendrás con tu GPS</h2>
+    <ul class="lista-beneficios">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Ubicación en tiempo real desde la app (iPhone y Android)</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Apagado de motor a distancia (en vehículos compatibles)</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Alertas de velocidad y de zonas (geocercas)</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Historial de recorridos de hasta 3 meses</li>
+    </ul>
+  </section>
+
+  <details class="tarjeta bases" id="bases">
+    <summary>Bases del concurso</summary>
+    <ol id="bases-lista"></ol>
+  </details>
+</main>
+
+<footer>
+  <span data-negocio>Maule GPS</span> · <span data-direccion>4 Norte 1163, Talca</span><br>
+  ¿Dudas? <a id="link-whatsapp" href="https://wa.me/56978038759" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+</footer>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN — cambia aquí los datos del concurso
+   ===================================================================== */
+const CONFIG = {
+  negocio: 'Maule GPS',
+  empresa: 'Soluciones Informáticas SpA',
+  rut: '77.831.197-6',
+  direccion: '4 Norte 1163, Talca',
+  whatsapp: '56978038759',            // sin + ni espacios
+  instagram: 'maulegps',              // tu usuario de Instagram, sin @
+
+  // Pega aquí la URL de tu Google Apps Script (termina en /exec).
+  // Si queda vacío, la página funciona en MODO PRUEBA y no guarda nada.
+  urlScript: '',
+
+  cierre: '2026-10-18T18:00:00-03:00', // fin de inscripciones (hora de Chile)
+  sorteo: '2026-10-18T20:00:00-03:00', // fecha y hora del sorteo en vivo
+
+  premio: 'Instalación de GPS a domicilio',
+  valorPremio: 'Valor referencial $85.000',
+  zona: 'Región del Maule',
+  ganadores: 1,
+  suplentes: 2,
+  diasParaResponder: 2,               // días que tiene el ganador para responder
+  mostrarContadorDesde: 25,           // muestra "Ya participan N" solo desde este número
+
+  // Opcional: regalo para todos los que participan (se muestra al inscribirse).
+  // Ej: 'Por participar tienes $10.000 de descuento en tu instalación hasta el 31 de octubre.'
+  beneficioParticipar: '',
+};
+
+const COMUNAS = [
+  'Talca', 'Constitución', 'Curepto', 'Empedrado', 'Maule', 'Pelarco', 'Pencahue', 'Río Claro', 'San Clemente', 'San Rafael',
+  'Cauquenes', 'Chanco', 'Pelluhue',
+  'Curicó', 'Hualañé', 'Licantén', 'Molina', 'Rauco', 'Romeral', 'Sagrada Familia', 'Teno', 'Vichuquén',
+  'Linares', 'Colbún', 'Longaví', 'Parral', 'Retiro', 'San Javier', 'Villa Alegre', 'Yerbas Buenas',
+];
+
+/* ===================================================================== */
+
+const $ = (id) => document.getElementById(id);
+const CLAVE_LOCAL = 'concurso-' + CONFIG.instagram + '-inscripcion';
+const cierreMs = new Date(CONFIG.cierre).getTime();
+const igUrl = 'https://www.instagram.com/' + CONFIG.instagram + '/';
+const params = new URLSearchParams(location.search);
+const origen = (params.get('src') || params.get('utm_source') || 'directo').slice(0, 30);
+
+function formatoFecha(iso, conHora) {
+  const opciones = { timeZone: 'America/Santiago', weekday: 'long', day: 'numeric', month: 'long' };
+  if (conHora) Object.assign(opciones, { hour: '2-digit', minute: '2-digit', hour12: false });
+  let txt = new Intl.DateTimeFormat('es-CL', opciones).format(new Date(iso));
+  if (conHora) txt = txt.replace(/,? (\d{1,2}:\d{2})$/, ' a las $1 hrs');
+  return txt.replace(',', '');
+}
+
+function leerLocal() { try { return JSON.parse(localStorage.getItem(CLAVE_LOCAL)); } catch (e) { return null; } }
+function guardarLocal(v) { try { localStorage.setItem(CLAVE_LOCAL, JSON.stringify(v)); } catch (e) { /* sin almacenamiento */ } }
+function borrarLocal() { try { localStorage.removeItem(CLAVE_LOCAL); } catch (e) { /* sin almacenamiento */ } }
+
+/* ---------- Textos que salen de CONFIG ---------- */
+function pintarTextos() {
+  document.querySelectorAll('[data-negocio]').forEach((el) => { el.textContent = CONFIG.negocio; });
+  document.querySelectorAll('[data-ig]').forEach((el) => { el.textContent = '@' + CONFIG.instagram; });
+  document.querySelectorAll('[data-zona]').forEach((el) => { el.textContent = CONFIG.zona; });
+  document.querySelectorAll('[data-premio]').forEach((el) => { el.textContent = CONFIG.premio; });
+  document.querySelectorAll('[data-valor-premio]').forEach((el) => { el.textContent = CONFIG.valorPremio; });
+  document.querySelectorAll('[data-direccion]').forEach((el) => { el.textContent = CONFIG.direccion; });
+  document.querySelectorAll('[data-fecha-sorteo]').forEach((el) => { el.textContent = formatoFecha(CONFIG.sorteo, false); });
+  document.querySelectorAll('[data-fecha-sorteo-larga]').forEach((el) => { el.textContent = formatoFecha(CONFIG.sorteo, true); });
+  document.querySelectorAll('[data-ig-link]').forEach((el) => { el.href = igUrl; });
+  $('btn-ig').href = igUrl;
+  $('link-whatsapp').href = 'https://wa.me/' + CONFIG.whatsapp;
+  $('texto-cierre').textContent = 'Las inscripciones cierran el ' + formatoFecha(CONFIG.cierre, true);
+  $('banner-prueba').hidden = !!CONFIG.urlScript;
+
+  const sel = $('comuna');
+  COMUNAS.forEach((c) => sel.add(new Option(c, c)));
+  sel.add(new Option('Otra comuna', 'Otra'));
+
+  const total = CONFIG.ganadores + CONFIG.suplentes;
+  const bases = [
+    `Organiza: ${CONFIG.negocio}, de ${CONFIG.empresa}, RUT ${CONFIG.rut}, con domicilio en ${CONFIG.direccion}.`,
+    `Vigencia: desde su publicación hasta el ${formatoFecha(CONFIG.cierre, true)}. Las inscripciones recibidas después de ese momento no participan.`,
+    `Pueden participar personas mayores de 18 años con un vehículo que pueda instalarse en la ${CONFIG.zona}.`,
+    `Para participar hay que seguir la cuenta de Instagram @${CONFIG.instagram} y completar este formulario con datos reales. Una participación por persona: si un mismo teléfono o cuenta de Instagram se inscribe más de una vez, se considera una sola vez.`,
+    `El sorteo se realiza el ${formatoFecha(CONFIG.sorteo, true)}, en vivo por Instagram, eligiendo al azar ${CONFIG.ganadores === 1 ? 'un ganador' : CONFIG.ganadores + ' ganadores'} y ${CONFIG.suplentes} suplentes (${total} nombres en total) entre todos los inscritos válidos.`,
+    `Al momento del sorteo se revisa que la persona siga a @${CONFIG.instagram}. Si no la sigue o sus datos no son válidos, se saca otro nombre.`,
+    `Contactaremos al ganador por WhatsApp. Si no responde dentro de ${CONFIG.diasParaResponder} días, el premio pasa al primer suplente, y así sucesivamente.`,
+    `Premio: ${CONFIG.premio} (${CONFIG.valorPremio.replace(/^Valor/, 'valor')}). Es personal, no se puede cambiar por dinero y la instalación se coordina con el ganador dentro de los 30 días siguientes al sorteo.`,
+    `Los datos personales se usan solo para gestionar este concurso y contactar a los ganadores (Ley 19.628). Quienes marquen la casilla de ofertas podrán recibir promociones de ${CONFIG.negocio} por WhatsApp. Puedes pedir que borremos tus datos escribiéndonos por WhatsApp al +${CONFIG.whatsapp}.`,
+    `Al participar autorizas que tu nombre y usuario de Instagram se muestren durante el sorteo y al anunciar a los ganadores.`,
+    `Esta promoción no está patrocinada, avalada, administrada ni asociada en modo alguno a Instagram ni a Meta.`,
+  ];
+  const ol = $('bases-lista');
+  bases.forEach((t) => { const li = document.createElement('li'); li.textContent = t; ol.appendChild(li); });
+}
+
+/* ---------- Cuenta regresiva ---------- */
+let intervalo = null;
+function actualizarCuenta() {
+  const resta = cierreMs - Date.now();
+  if (resta <= 0) {
+    clearInterval(intervalo);
+    mostrar('cerrado');
+    $('bloque-cuenta').hidden = true;
+    return;
+  }
+  const s = Math.floor(resta / 1000);
+  $('cd-d').textContent = Math.floor(s / 86400);
+  $('cd-h').textContent = Math.floor((s % 86400) / 3600);
+  $('cd-m').textContent = Math.floor((s % 3600) / 60);
+  $('cd-s').textContent = s % 60;
+}
+
+/* ---------- Vistas ---------- */
+function mostrar(vista) {
+  $('participar').hidden = vista !== 'formulario';
+  $('listo').hidden = vista !== 'listo';
+  $('cerrado').hidden = vista !== 'cerrado';
+}
+
+function mostrarListo(datos, desplazar) {
+  const nombreCorto = (datos.nombre || '').split(/\s+/)[0];
+  $('listo-titulo').textContent = datos.duplicado
+    ? `${nombreCorto ? nombreCorto + ', ya' : 'Ya'} estabas participando`
+    : `¡Listo${nombreCorto ? ', ' + nombreCorto : ''}! Ya estás en la tómbola`;
+  $('listo-numero').textContent = 'N° ' + String(datos.numero || 0).padStart(3, '0');
+  if (CONFIG.beneficioParticipar) {
+    $('listo-beneficio').textContent = CONFIG.beneficioParticipar;
+    $('listo-beneficio').hidden = false;
+  }
+  const urlCompartir = location.origin + location.pathname + '?src=amigo';
+  const texto = `Estoy participando por una instalación de GPS gratis con ${CONFIG.negocio}. Participa tú también: ${urlCompartir}`;
+  $('btn-compartir').href = 'https://wa.me/?text=' + encodeURIComponent(texto);
+  mostrar('listo');
+  if (desplazar) {
+    $('listo').focus({ preventScroll: true });
+    $('listo').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+/* ---------- Validación ---------- */
+function normalizarTelefono(valor) {
+  let d = String(valor || '').replace(/\D/g, '');
+  if (d.length === 11 && d.startsWith('56')) d = d.slice(2);
+  if (d.length === 8) d = '9' + d;
+  return /^9\d{8}$/.test(d) ? d : '';
+}
+
+function normalizarInstagram(valor) {
+  let u = String(valor || '').trim().toLowerCase();
+  u = u.replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/[/?#].*$/, '').replace(/^@+/, '');
+  return /^[a-z0-9._]{1,30}$/.test(u) ? u : '';
+}
+
+function marcarError(campo, mensaje) {
+  const err = $('err-' + campo);
+  const input = { sigue: 'sigue', bases: 'bases-ok' }[campo] || campo;
+  const caja = $(input).closest('.entrada');
+  err.textContent = mensaje || '';
+  err.hidden = !mensaje;
+  if (caja) caja.classList.toggle('invalido', !!mensaje);
+  $(input).setAttribute('aria-invalid', mensaje ? 'true' : 'false');
+}
+
+function validar() {
+  const datos = {
+    nombre: $('nombre').value.trim().replace(/\s+/g, ' '),
+    telefono: normalizarTelefono($('telefono').value),
+    instagram: normalizarInstagram($('instagram').value),
+    comuna: $('comuna').value,
+    vehiculo: $('vehiculo').value,
+    sigue: $('sigue').checked,
+    bases: $('bases-ok').checked,
+    ofertas: $('ofertas').checked,
+    website: $('website').value,
+    origen,
+  };
+  const errores = {
+    nombre: /^\S{2,}(\s+\S+)+$/.test(datos.nombre) ? '' : 'Escribe tu nombre y apellido.',
+    telefono: datos.telefono ? '' : 'Ingresa un celular válido: 9 dígitos que empiezan con 9.',
+    instagram: datos.instagram ? '' : 'Escribe tu usuario de Instagram (ej: juanperez).',
+    comuna: datos.comuna ? '' : 'Elige tu comuna.',
+    sigue: datos.sigue ? '' : `Para participar debes seguir a @${CONFIG.instagram}.`,
+    bases: datos.bases ? '' : 'Debes aceptar las bases para participar.',
+  };
+  let primero = null;
+  Object.keys(errores).forEach((campo) => {
+    marcarError(campo, errores[campo]);
+    if (errores[campo] && !primero) primero = campo;
+  });
+  if (primero) {
+    const el = $({ sigue: 'sigue', bases: 'bases-ok' }[primero] || primero);
+    el.focus();
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return null;
+  }
+  return datos;
+}
+
+/* ---------- Envío ---------- */
+async function enviar(datos) {
+  if (!CONFIG.urlScript) {
+    // Modo prueba: simula la respuesta del servidor
+    await new Promise((r) => setTimeout(r, 700));
+    return { ok: true, numero: Math.floor(Math.random() * 200) + 1, prueba: true };
+  }
+  const control = new AbortController();
+  const tiempo = setTimeout(() => control.abort(), 20000);
+  try {
+    // text/plain evita el "preflight" CORS que Google Apps Script no responde
+    const res = await fetch(CONFIG.urlScript, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(datos),
+      signal: control.signal,
+    });
+    return await res.json();
+  } finally {
+    clearTimeout(tiempo);
+  }
+}
+
+$('formulario').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  $('error-general').hidden = true;
+  if (Date.now() > cierreMs) { mostrar('cerrado'); return; }
+  const datos = validar();
+  if (!datos) return;
+
+  const boton = $('btn-enviar');
+  boton.disabled = true;
+  boton.innerHTML = '<span class="girando"></span>Enviando…';
+  try {
+    const r = await enviar(datos);
+    if (r && r.ok) {
+      const registro = { numero: r.numero, nombre: datos.nombre, duplicado: !!r.duplicado };
+      guardarLocal(registro);
+      mostrarListo(registro, true);
+      $('formulario').reset();
+    } else if (r && r.error === 'cerrado') {
+      mostrar('cerrado');
+    } else {
+      throw new Error((r && r.error) || 'Respuesta inválida');
+    }
+  } catch (e) {
+    $('error-general').textContent = 'No pudimos registrar tu participación. Revisa tu conexión e inténtalo de nuevo. Si el problema sigue, escríbenos por WhatsApp.';
+    $('error-general').hidden = false;
+  } finally {
+    boton.disabled = false;
+    boton.textContent = 'Quiero participar';
+  }
+});
+
+// Quita el error de un campo apenas la persona lo corrige
+['nombre', 'telefono', 'instagram', 'comuna'].forEach((campo) => {
+  $(campo).addEventListener('input', () => marcarError(campo, ''));
+});
+$('sigue').addEventListener('change', () => {
+  marcarError('sigue', '');
+  $('paso-1').classList.toggle('hecho', $('sigue').checked);
+});
+$('bases-ok').addEventListener('change', () => marcarError('bases', ''));
+
+$('btn-otra').addEventListener('click', () => {
+  borrarLocal();
+  mostrar('formulario');
+  $('paso-1').classList.remove('hecho');
+  $('participar').scrollIntoView({ behavior: 'smooth' });
+  $('nombre').focus({ preventScroll: true });
+});
+
+// Abre las bases al tocar el enlace
+$('link-bases').addEventListener('click', () => { $('bases').open = true; });
+if (location.hash === '#bases') $('bases').open = true;
+
+/* ---------- Contador público de participantes ---------- */
+async function cargarContador() {
+  if (!CONFIG.urlScript || !CONFIG.mostrarContadorDesde) return;
+  try {
+    const res = await fetch(CONFIG.urlScript + '?accion=total');
+    const r = await res.json();
+    if (r.ok && r.total >= CONFIG.mostrarContadorDesde) {
+      $('contador-total').textContent = r.total;
+      $('contador').hidden = false;
+    }
+  } catch (e) { /* el contador es opcional */ }
+}
+
+/* ---------- Inicio ---------- */
+pintarTextos();
+const previo = leerLocal();
+if (Date.now() > cierreMs) {
+  mostrar('cerrado');
+  $('bloque-cuenta').hidden = true;
+} else {
+  if (previo && previo.numero) mostrarListo(Object.assign({}, previo, { duplicado: true }));
+  else mostrar('formulario');
+  actualizarCuenta();
+  intervalo = setInterval(actualizarCuenta, 1000);
+  cargarContador();
+}
+</script>
+</body>
+</html>
