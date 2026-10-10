@@ -1,0 +1,31 @@
+/* Maule GPS · tipografías y colores de la marca (compartido por todas las páginas del concurso) */
+@font-face { font-family: 'Audiowide'; src: url('fonts/audiowide-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Orbitron'; src: url('fonts/orbitron-800.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+@font-face { font-family: 'Orbitron'; src: url('fonts/orbitron-900.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+@font-face { font-family: 'Rajdhani'; src: url('fonts/rajdhani-500.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Rajdhani'; src: url('fonts/rajdhani-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Rajdhani'; src: url('fonts/rajdhani-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+
+:root {
+  /* Fondos */
+  --mg-fondo: #11161f;
+  --mg-fondo-2: #171d2a;
+  --mg-panel: #1d2331;
+  --mg-borde: rgba(255, 255, 255, .10);
+  /* Texto */
+  --mg-texto: #f2f4f8;
+  --mg-texto-2: #b5c0ce;
+  /* Acentos de marca */
+  --mg-rojo: #d23b2a;        /* "GPS" y palabras destacadas */
+  --mg-rojo-logo: #da0400;   /* rojo del logo */
+  --mg-cian: #27c5e6;        /* íconos, bordes y datos */
+  --mg-oro: #ffdf8d;         /* signo $ del precio */
+  --mg-precio-1: #f65b32;    /* cinta de precio (degradado) */
+  --mg-precio-2: #a22e21;
+  --mg-wa-1: #23cc66;        /* botón WhatsApp (degradado) */
+  --mg-wa-2: #13917b;
+  /* Tipografías */
+  --mg-f-marca: 'Audiowide', 'Orbitron', system-ui, sans-serif;   /* logotipo, títulos cortos, precio */
+  --mg-f-titular: 'Orbitron', 'Audiowide', system-ui, sans-serif; /* titulares grandes */
+  --mg-f-texto: 'Rajdhani', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; /* textos */
+}
