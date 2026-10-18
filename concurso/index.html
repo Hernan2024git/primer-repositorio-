@@ -108,7 +108,7 @@
   .hero-escena:not(:has(.hero-vehiculo)) { display: none; }
   .hero-vehiculo { position: relative; z-index: 1; display: block; width: 100%; height: auto; }
   /* El pin "marca" el techo del auto: ajusta left/top si cambia el dibujo del vehículo */
-  .pin-pulso { position: absolute; z-index: 2; left: 56%; top: 17%; width: 38px; height: 47px; margin: -47px 0 0 -19px; pointer-events: none; }
+  .pin-pulso { position: absolute; z-index: 2; left: 38%; top: 9%; width: 38px; height: 47px; margin: -47px 0 0 -19px; pointer-events: none; }
   .pin-pulso svg { position: relative; display: block; width: 38px; height: 47px; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .5)) drop-shadow(0 0 10px rgba(246, 91, 50, .55)); }
   .pin-pulso::before, .pin-pulso::after {
     content: ""; position: absolute; left: 50%; bottom: -4px; width: 26px; height: 9px; margin-left: -13px;
@@ -399,10 +399,10 @@
     <div class="hero-texto">
       <span class="eyebrow">Concurso · <span data-zona>Región del Maule</span></span>
       <h1>Gánate la instalación de tu GPS <span class="rojo">gratis</span></h1>
-      <p class="bajada">Mira dónde está tu vehículo <span class="cian">en tiempo real</span> desde el celular. Participa en 2 pasos y entra a la tómbola del <strong data-fecha-sorteo>domingo 18 de octubre</strong>.</p>
+      <p class="bajada">Síguenos en Instagram, etiquétanos en una historia y entra a la tómbola del <strong data-fecha-sorteo>domingo 18 de octubre</strong>.</p>
     </div>
     <div class="hero-escena">
-      <img class="hero-vehiculo" src="img/vehiculo-premium.svg" alt="" width="1600" height="760" decoding="async" onerror="this.remove()">
+      <img class="hero-vehiculo" src="img/vehiculos-fila.png" alt="" width="1070" height="307" decoding="async" onerror="this.remove()">
       <div class="pin-pulso" aria-hidden="true">
         <svg viewBox="0 0 44 54"><defs><linearGradient id="pin-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6a3d"/><stop offset="1" stop-color="#b3281c"/></linearGradient></defs><path d="M22 2C11.5 2 3 10.3 3 20.6 3 34.5 22 52 22 52s19-17.5 19-31.4C41 10.3 32.5 2 22 2Z" fill="url(#pin-g)" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/><circle cx="22" cy="20.5" r="7" fill="#11161f"/><circle cx="22" cy="20.5" r="3.2" fill="#27c5e6"/></svg>
       </div>
@@ -438,28 +438,22 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
             <span>Seguir a <span data-ig>@maulegps</span></span>
           </a>
-          <label class="check"><input type="checkbox" name="sigue" id="sigue"> <span>Ya sigo a <b data-ig>@maulegps</b></span></label>
-          <p class="msg-error" id="err-sigue" hidden></p>
+        </div>
+      </div>
+
+      <div class="paso">
+        <span class="num" aria-hidden="true">2</span>
+        <div>
+          <h2>Etiquétanos en una historia</h2>
+          <p class="ayuda">Sube una historia en Instagram mencionando a <b data-ig>@maulegps</b>: una foto de tu auto o compartiendo una de nuestras publicaciones. Usa el sticker de mención o escribe <b data-ig>@maulegps</b>.</p>
         </div>
       </div>
 
       <div class="paso" style="border:0;margin:0;padding:0">
-        <span class="num" aria-hidden="true">2</span>
+        <span class="num" aria-hidden="true">3</span>
         <div>
-          <h2>Completa tus datos</h2>
-          <p class="ayuda">Si ganas, te contactamos por WhatsApp.</p>
-
-          <div class="campo">
-            <label for="nombre">Nombre y apellido</label>
-            <div class="entrada"><input type="text" id="nombre" name="nombre" autocomplete="name" maxlength="80" placeholder="Ej: Juan Pérez" required></div>
-            <p class="msg-error" id="err-nombre" hidden></p>
-          </div>
-
-          <div class="campo">
-            <label for="telefono">WhatsApp</label>
-            <div class="entrada"><span class="prefijo">+56</span><input type="tel" id="telefono" name="telefono" autocomplete="tel-national" inputmode="tel" maxlength="16" placeholder="9 1234 5678" required></div>
-            <p class="msg-error" id="err-telefono" hidden></p>
-          </div>
+          <h2>Escribe tu usuario</h2>
+          <p class="ayuda">Con tu usuario de Instagram entras a la tómbola. Si ganas, te escribimos por Instagram.</p>
 
           <div class="campo">
             <label for="instagram">Tu usuario de Instagram</label>
@@ -467,36 +461,14 @@
             <p class="msg-error" id="err-instagram" hidden></p>
           </div>
 
-          <div class="campo">
-            <label for="comuna">Comuna</label>
-            <div class="entrada"><select id="comuna" name="comuna" required><option value="">Elige tu comuna</option></select></div>
-            <p class="msg-error" id="err-comuna" hidden></p>
-          </div>
-
-          <div class="campo">
-            <label for="vehiculo">¿Qué vehículo tienes? <small>(opcional)</small></label>
-            <div class="entrada">
-              <select id="vehiculo" name="vehiculo">
-                <option value="">Elegir</option>
-                <option>Auto</option>
-                <option>Camioneta / SUV</option>
-                <option>Moto</option>
-                <option>Camión</option>
-                <option>Flota de empresa</option>
-                <option>Otro</option>
-              </select>
-            </div>
-          </div>
-
-          <label class="check"><input type="checkbox" name="bases" id="bases-ok"> <span>Soy mayor de 18 años y acepto las <a href="#bases" id="link-bases">bases del concurso</a></span></label>
-          <p class="msg-error" id="err-bases" hidden></p>
-          <label class="check opcional"><input type="checkbox" name="ofertas" id="ofertas"> <span>Quiero recibir ofertas de <span data-negocio>Maule GPS</span> por WhatsApp</span></label>
+          <label class="check"><input type="checkbox" name="sigue" id="sigue"> <span>Ya sigo a <b data-ig>@maulegps</b>, subí la historia y acepto las <a href="#bases" id="link-bases">bases</a></span></label>
+          <p class="msg-error" id="err-sigue" hidden></p>
 
           <div class="oculto" aria-hidden="true"><label>No llenar <input type="text" name="website" id="website" tabindex="-1" autocomplete="off"></label></div>
 
           <p class="error-general" id="error-general" role="alert" hidden></p>
           <button type="submit" class="btn-principal" id="btn-enviar">Quiero participar</button>
-          <p class="letra-chica">Una participación por persona. Tus datos se usan solo para este concurso<span id="txt-ofertas"></span>.</p>
+          <p class="letra-chica">Una participación por cuenta de Instagram. Tu usuario se usa solo para este concurso.</p>
         </div>
       </div>
     </form>
@@ -507,8 +479,8 @@
     <div class="check-grande"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
     <h2 id="listo-titulo">¡Listo! Ya estás en la tómbola</h2>
     <div class="ticket"><small>Tu número de participación</small><b id="listo-numero">N° 000</b></div>
-    <p id="listo-texto">El sorteo es el <b data-fecha-sorteo-larga>domingo 18 de octubre</b> en vivo por Instagram <b data-ig>@maulegps</b>. Si ganas, te escribimos al WhatsApp.</p>
-    <p class="nota"><b>Importante:</b> sigue a <span data-ig>@maulegps</span> hasta el día del sorteo. Si al momento del sorteo no nos sigues, sacamos otro nombre.</p>
+    <p id="listo-texto">El sorteo es el <b data-fecha-sorteo-larga>domingo 18 de octubre</b> en vivo por Instagram <b data-ig>@maulegps</b>. Si ganas, te escribimos por Instagram.</p>
+    <p class="nota"><b>Importante:</b> sigue a <span data-ig>@maulegps</span> hasta el sorteo y revisa tus mensajes de Instagram. Si al momento del sorteo no nos sigues o no nos etiquetaste en una historia, sacamos otro nombre.</p>
     <p class="beneficio" id="listo-beneficio" hidden></p>
     <a class="btn-secundario" id="btn-compartir" href="#" target="_blank" rel="noopener">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="#25d366" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.4-3.9-4.6-4.1-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1 1 2 1.3 2.3 1.4.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.6-.1 1.2Z"/></svg>
@@ -597,7 +569,12 @@ const CLAVE_LOCAL = 'concurso-' + CONFIG.instagram + '-inscripcion';
 const cierreMs = new Date(CONFIG.cierre).getTime();
 const igUrl = 'https://www.instagram.com/' + CONFIG.instagram + '/';
 const params = new URLSearchParams(location.search);
-const origen = (params.get('src') || params.get('utm_source') || 'directo').slice(0, 30);
+const origen = (window.CONCURSO_ORIGEN || params.get('src') || params.get('utm_source') || 'directo').slice(0, 30);
+// Si la página la sirve Google Apps Script, se guarda con google.script.run (sin CONFIG.urlScript)
+const enGoogle = !!(window.google && google.script && google.script.run);
+function llamarGoogle(funcion, ...args) {
+  return new Promise((ok, falla) => google.script.run.withSuccessHandler(ok).withFailureHandler(falla)[funcion](...args));
+}
 
 function formatoFecha(iso, conHora) {
   const opciones = { timeZone: 'America/Santiago', weekday: 'long', day: 'numeric', month: 'long' };
@@ -625,24 +602,21 @@ function pintarTextos() {
   $('btn-ig').href = igUrl;
   $('link-whatsapp').href = 'https://wa.me/' + CONFIG.whatsapp;
   $('texto-cierre').textContent = 'Las inscripciones cierran el ' + formatoFecha(CONFIG.cierre, true);
-  $('banner-prueba').hidden = !!CONFIG.urlScript;
+  $('banner-prueba').hidden = !!CONFIG.urlScript || enGoogle;
 
-  const sel = $('comuna');
-  COMUNAS.forEach((c) => sel.add(new Option(c, c)));
-  sel.add(new Option('Otra comuna', 'Otra'));
 
   const total = CONFIG.ganadores + CONFIG.suplentes;
   const bases = [
     `Organiza: ${CONFIG.negocio}, de ${CONFIG.empresa}, RUT ${CONFIG.rut}, con domicilio en ${CONFIG.direccion}.`,
     `Vigencia: desde su publicación hasta el ${formatoFecha(CONFIG.cierre, true)}. Las inscripciones recibidas después de ese momento no participan.`,
     `Pueden participar personas mayores de 18 años con un vehículo que pueda instalarse en la ${CONFIG.zona}.`,
-    `Para participar hay que seguir la cuenta de Instagram @${CONFIG.instagram} y completar este formulario con datos reales. Una participación por persona: si un mismo teléfono o cuenta de Instagram se inscribe más de una vez, se considera una sola vez.`,
+    `Para participar hay que seguir la cuenta de Instagram @${CONFIG.instagram}, subir una historia en Instagram que mencione a @${CONFIG.instagram} y escribir tu usuario de Instagram en esta página. Una participación por cuenta: si la misma cuenta se inscribe más de una vez, cuenta una sola vez.`,
     `El sorteo se realiza el ${formatoFecha(CONFIG.sorteo, true)}, en vivo por Instagram, eligiendo al azar ${CONFIG.ganadores === 1 ? 'un ganador' : CONFIG.ganadores + ' ganadores'} y ${CONFIG.suplentes} suplentes (${total} nombres en total) entre todos los inscritos válidos.`,
-    `Al momento del sorteo se revisa que la persona siga a @${CONFIG.instagram}. Si no la sigue o sus datos no son válidos, se saca otro nombre.`,
-    `Contactaremos al ganador por WhatsApp. Si no responde dentro de ${CONFIG.diasParaResponder} días, el premio pasa al primer suplente, y así sucesivamente.`,
+    `Al momento del sorteo se revisa que la cuenta siga a @${CONFIG.instagram} y que nos haya mencionado en una historia durante la vigencia del concurso. Si no cumple, se saca otro nombre.`,
+    `Contactaremos al ganador por mensaje directo de Instagram. Si no responde dentro de ${CONFIG.diasParaResponder} días, el premio pasa al primer suplente, y así sucesivamente.`,
     `Premio: ${CONFIG.premio} (${CONFIG.valorPremio.replace(/^Valor/, 'valor')}). Es personal, no se puede cambiar por dinero y la instalación se coordina con el ganador dentro de los 30 días siguientes al sorteo.`,
-    `Los datos personales se usan solo para gestionar este concurso y contactar a los ganadores (Ley 19.628). Quienes marquen la casilla de ofertas podrán recibir promociones de ${CONFIG.negocio} por WhatsApp. Puedes pedir que borremos tus datos escribiéndonos por WhatsApp al +${CONFIG.whatsapp}.`,
-    `Al participar autorizas que tu nombre y usuario de Instagram se muestren durante el sorteo y al anunciar a los ganadores.`,
+    `El usuario de Instagram se usa solo para gestionar este concurso y contactar a los ganadores (Ley 19.628). Puedes pedir que lo borremos escribiéndonos por WhatsApp al +${CONFIG.whatsapp}.`,
+    `Al participar autorizas que tu usuario de Instagram se muestre durante el sorteo y al anunciar a los ganadores.`,
     `Esta promoción no está patrocinada, avalada, administrada ni asociada en modo alguno a Instagram ni a Meta.`,
   ];
   const ol = $('bases-lista');
@@ -683,7 +657,7 @@ function mostrarListo(datos, desplazar) {
     $('listo-beneficio').textContent = CONFIG.beneficioParticipar;
     $('listo-beneficio').hidden = false;
   }
-  const urlCompartir = location.origin + location.pathname + '?src=amigo';
+  const urlCompartir = (window.CONCURSO_URL || location.origin + location.pathname) + '?src=amigo';
   const texto = `Estoy participando por una instalación de GPS gratis con ${CONFIG.negocio}. Participa tú también: ${urlCompartir}`;
   $('btn-compartir').href = 'https://wa.me/?text=' + encodeURIComponent(texto);
   mostrar('listo');
@@ -719,24 +693,15 @@ function marcarError(campo, mensaje) {
 
 function validar() {
   const datos = {
-    nombre: $('nombre').value.trim().replace(/\s+/g, ' '),
-    telefono: normalizarTelefono($('telefono').value),
     instagram: normalizarInstagram($('instagram').value),
-    comuna: $('comuna').value,
-    vehiculo: $('vehiculo').value,
     sigue: $('sigue').checked,
-    bases: $('bases-ok').checked,
-    ofertas: $('ofertas').checked,
+    bases: $('sigue').checked,
     website: $('website').value,
     origen,
   };
   const errores = {
-    nombre: /^\S{2,}(\s+\S+)+$/.test(datos.nombre) ? '' : 'Escribe tu nombre y apellido.',
-    telefono: datos.telefono ? '' : 'Ingresa un celular válido: 9 dígitos que empiezan con 9.',
     instagram: datos.instagram ? '' : 'Escribe tu usuario de Instagram (ej: juanperez).',
-    comuna: datos.comuna ? '' : 'Elige tu comuna.',
-    sigue: datos.sigue ? '' : `Para participar debes seguir a @${CONFIG.instagram}.`,
-    bases: datos.bases ? '' : 'Debes aceptar las bases para participar.',
+    sigue: datos.sigue ? '' : `Para participar debes seguir a @${CONFIG.instagram}, subir la historia y marcar la casilla.`,
   };
   let primero = null;
   Object.keys(errores).forEach((campo) => {
@@ -744,7 +709,7 @@ function validar() {
     if (errores[campo] && !primero) primero = campo;
   });
   if (primero) {
-    const el = $({ sigue: 'sigue', bases: 'bases-ok' }[primero] || primero);
+    const el = $(primero);
     el.focus();
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return null;
@@ -754,6 +719,7 @@ function validar() {
 
 /* ---------- Envío ---------- */
 async function enviar(datos) {
+  if (enGoogle) return llamarGoogle('registrar', datos);
   if (!CONFIG.urlScript) {
     // Modo prueba: simula la respuesta del servidor
     await new Promise((r) => setTimeout(r, 700));
@@ -788,7 +754,7 @@ $('formulario').addEventListener('submit', async (ev) => {
   try {
     const r = await enviar(datos);
     if (r && r.ok) {
-      const registro = { numero: r.numero, nombre: datos.nombre, duplicado: !!r.duplicado };
+      const registro = { numero: r.numero, nombre: '@' + datos.instagram, duplicado: !!r.duplicado };
       guardarLocal(registro);
       mostrarListo(registro, true);
       $('formulario').reset();
@@ -806,22 +772,18 @@ $('formulario').addEventListener('submit', async (ev) => {
   }
 });
 
-// Quita el error de un campo apenas la persona lo corrige
-['nombre', 'telefono', 'instagram', 'comuna'].forEach((campo) => {
-  $(campo).addEventListener('input', () => marcarError(campo, ''));
-});
-$('sigue').addEventListener('change', () => {
-  marcarError('sigue', '');
-  $('paso-1').classList.toggle('hecho', $('sigue').checked);
-});
-$('bases-ok').addEventListener('change', () => marcarError('bases', ''));
+// Quita el error apenas la persona lo corrige
+$('instagram').addEventListener('input', () => marcarError('instagram', ''));
+$('sigue').addEventListener('change', () => marcarError('sigue', ''));
+// Al tocar "Seguir" el paso 1 queda marcado como hecho
+$('btn-ig').addEventListener('click', () => $('paso-1').classList.add('hecho'));
 
 $('btn-otra').addEventListener('click', () => {
   borrarLocal();
   mostrar('formulario');
   $('paso-1').classList.remove('hecho');
   $('participar').scrollIntoView({ behavior: 'smooth' });
-  $('nombre').focus({ preventScroll: true });
+  $('instagram').focus({ preventScroll: true });
 });
 
 // Abre las bases al tocar el enlace
@@ -830,10 +792,9 @@ if (location.hash === '#bases') $('bases').open = true;
 
 /* ---------- Contador público de participantes ---------- */
 async function cargarContador() {
-  if (!CONFIG.urlScript || !CONFIG.mostrarContadorDesde) return;
+  if (!CONFIG.mostrarContadorDesde || (!CONFIG.urlScript && !enGoogle)) return;
   try {
-    const res = await fetch(CONFIG.urlScript + '?accion=total');
-    const r = await res.json();
+    const r = enGoogle ? await llamarGoogle('total') : await (await fetch(CONFIG.urlScript + '?accion=total')).json();
     if (r.ok && r.total >= CONFIG.mostrarContadorDesde) {
       $('contador-total').textContent = r.total;
       $('contador').hidden = false;
