@@ -22,17 +22,13 @@ for (const [nombre, js] of [['qrcode.js', qrcodeJs], ['html-to-image.js', html2i
   if (/<\/script/i.test(js)) throw new Error(nombre + ' contiene </script>');
 }
 
-// Auto: el filo de luz del techo (gRim) a la mitad, para que se lea como reflejo y no como contorno
-let vehiculo = fs.readFileSync(path.join(REPO, 'img/vehiculo-premium.svg'), 'utf8');
-vehiculo = vehiculo.replace(/(<linearGradient id="gRim"[^>]*>)([\s\S]*?)(<\/linearGradient>)/, (_, a, stops, c) =>
-  a + stops.replace(/stop-opacity="([\d.]+)"/g, (__, o) => `stop-opacity="${(+o * 0.5).toFixed(3)}"`) + c);
-if (!/stop-opacity="0\.500"/.test(vehiculo)) throw new Error('No se encontró gRim en el SVG del auto');
+// Vehículos: la fila de autos de los folletos de Maule GPS (PNG con fondo transparente)
 
 const reemplazos = {
   '/*@@MARCA_CSS@@*/': marcaCss.trim(),
   // Logo limpio y liviano (lo genera logo.py desde img/logo-maule-gps.png; index.html sigue usando el original)
   '@@LOGO@@': dataUri(path.join(__dirname, 'logo-afiche.png'), 'image/png'),
-  '@@VEHICULO@@': 'data:image/svg+xml;base64,' + Buffer.from(vehiculo).toString('base64'),
+  '@@VEHICULO@@': dataUri(path.join(REPO, 'img/vehiculos-fila.png'), 'image/png'),
   '/*@@QRCODE_JS@@*/': qrcodeJs.trim(),
   '/*@@HTML_TO_IMAGE_JS@@*/': html2imgJs.trim(),
 };

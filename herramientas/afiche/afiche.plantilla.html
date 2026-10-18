@@ -25,7 +25,7 @@ const CONFIG = {
   bajada: 'Rastreo GPS para tu auto, *desde tu celular*.',
   caracteristicas: ['Apagado remoto', 'Ubicación en tiempo real', 'Alerta de movimiento', 'Historial de recorridos'],
   tituloConcurso: ['GANA', 'LA INSTALACIÓN', 'DE TU GPS *GRATIS*'],
-  pasos: ['Escanea el código QR', 'Sigue a {instagram} en Instagram', 'Completa tus datos'],
+  pasos: ['Escanea el código QR', 'Sigue a {instagram} en Instagram', 'Etiquétanos en una historia'],
   leyendaQR: 'ESCANEA PARA PARTICIPAR',
   // En la versión para historias de Instagram / estados de WhatsApp quien mira no puede escanear su propia pantalla
   historia: { paso1: 'Toca el link de nuestra bio', leyendaQR: 'LINK EN LA BIO' },
@@ -205,12 +205,9 @@ const CONFIG = {
   /* Sombra de contacto: oscurece el hueco entre la carrocería y el piso para que el auto se apoye */
   .afiche .sombra { position: absolute; left: 50%; top: calc(var(--piso) - 30px); width: 900px; height: 60px; transform: translateX(-50%);
     background: radial-gradient(closest-side, rgba(0,0,0,.95), rgba(0,0,0,.6) 55%, transparent); }
-  /* El cuerpo del auto ocupa x 74–1509 del viewBox de 1600: con left 6 y ancho 1079 queda entre 56 y 1024.
-     Las ruedas tocan el piso en y = 642 del SVG (642 × 0,674 = 433 px).
-     Sin halo alrededor de la silueta; la cola se funde con la oscuridad para que no se lea como recortada. */
-  .afiche .auto { position: absolute; left: 6px; top: calc(var(--piso) - 433px); width: 1079px; height: auto; display: block; filter: none;
-    -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,.25) 0, #000 9%);
-            mask-image: linear-gradient(90deg, rgba(0,0,0,.25) 0, #000 9%); }
+  /* Fila de vehículos (1070×307 px, fondo transparente): 1000 px de ancho, las ruedas delanteras apoyan en el piso */
+  .afiche .auto { position: absolute; left: 40px; top: calc(var(--piso) - 262px); width: 1000px; height: auto; display: block; filter: none; }
+  .afiche:not(.auto-propio) .destello, .afiche:not(.auto-propio) .guia { display: none; }
   .afiche .destello { position: absolute; left: 1011px; top: calc(var(--piso) - 145px); width: 0; height: 0; }
   .afiche .destello::before { content: ""; position: absolute; right: 6px; top: -2px; width: 640px; height: 4px; border-radius: 4px;
     background: linear-gradient(90deg, transparent, rgba(39,197,230,.35) 50%, rgba(200,245,255,.95) 96%, rgba(39,197,230,.5));
@@ -437,7 +434,7 @@ const CONFIG = {
               <ol class="pasos">
                 <li><span class="n" data-campo="paso-1-n">1</span><span data-campo="paso-1">Escanea el código QR</span></li>
                 <li><span class="n" data-campo="paso-2-n">2</span><span data-campo="paso-2">Sigue a <span class="ig"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6"/></svg><span data-campo="instagram">@maulegps</span></span> en Instagram</span></li>
-                <li><span class="n" data-campo="paso-3-n">3</span><span data-campo="paso-3">Completa tus datos</span></li>
+                <li><span class="n" data-campo="paso-3-n">3</span><span data-campo="paso-3">Etiquétanos en una historia</span></li>
               </ol>
               <div class="fecha"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span data-campo="fecha-sorteo"><span class="tenue">Sorteo en vivo ·</span> domingo 18 de octubre</span></div>
             </div>
