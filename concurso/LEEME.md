@@ -87,7 +87,7 @@ Después usa los botones:
 Para cambiar el precio, la fecha del sorteo, el Instagram, el teléfono o los textos, abre `admin/afiche.html` con un editor de texto y cambia el bloque `CONFIGURACIÓN` que está al principio. Lo que va entre `*asteriscos*` sale destacado en color.
 
 > Antes de imprimir:
-> - Confirma que **@maulegps** es tu Instagram (sale en el afiche y es requisito para participar) y que la fecha del sorteo es la correcta (lunes 19 de octubre).
+> - Confirma que **@maule_gps** es tu Instagram (sale en el afiche y es requisito para participar) y que la fecha del sorteo es la correcta (lunes 19 de octubre).
 > - Imprime una hoja de prueba y escanea el A4 (QR de unos 49 mm) y un afiche recortado de 2 por hoja (QR de unos 31 mm) con un iPhone y con un Android.
 > - Si tienes el logo en mejor calidad (SVG o PNG de 1000 px o más de alto), úsalo con **Cambiar logo**: el que viene está recortado de un afiche antiguo.
 
