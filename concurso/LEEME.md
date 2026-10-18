@@ -1,5 +1,8 @@
 # Concurso Maule GPS · Instalación GPS gratis
 
+> **18-oct-2026 — ESTADO REAL:** la página está publicada en **https://maulegps.com/concurso/** (nuestro VPS2) y las inscripciones las guarda `api.php` en el mismo servidor; **ya no se usa Google Sheets ni Apps Script**. Lo que sigue describe el esquema anterior con Google (sirve solo como referencia). Publicar cambios: `bash ops/concurso/deploy_concurso.sh` desde `codigo cloude`. Respaldo de inscritos: `api.php?accion=csv&clave=…`.
+
+
 Página para que la gente se inscriba escaneando un QR, con la lista guardada en Google Sheets y una tómbola para sortear en vivo por Instagram.
 
 | Archivo | Para qué sirve | ¿Se sube a la página? |
