@@ -260,24 +260,24 @@
     <summary>Preparación <span id="resumen-panel">Carga a los participantes</span></summary>
 
     <div class="pestanas" role="tablist">
-      <button type="button" role="tab" aria-selected="true" data-pestana="sheets">Desde Google Sheets</button>
+      <button type="button" role="tab" aria-selected="true" data-pestana="sheets">Desde el servidor</button>
       <button type="button" role="tab" aria-selected="false" data-pestana="csv">Archivo CSV</button>
       <button type="button" role="tab" aria-selected="false" data-pestana="ejemplo">Ensayo</button>
     </div>
 
     <div data-contenido="sheets">
       <div class="fila-form">
-        <label>URL de Google Apps Script (termina en /exec)
-          <input type="url" id="url-script" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+        <label>Dirección del servidor de inscripciones (termina en api.php)
+          <input type="url" id="url-script" placeholder="https://maulegps.com/concurso/api.php" autocomplete="off">
         </label>
         <label>Clave de la tómbola
-          <input type="password" id="clave" placeholder="La clave CLAVE_ADMIN del script" autocomplete="off">
+          <input type="password" id="clave" placeholder="La clave de la tómbola" autocomplete="off">
         </label>
         <button type="button" class="btn" id="btn-cargar-sheets">Cargar</button>
       </div>
     </div>
     <div data-contenido="csv" hidden>
-      <p class="estado-carga">En Google Sheets: Archivo › Descargar › Valores separados por comas (.csv). Luego elige el archivo aquí.</p>
+      <p class="estado-carga">Respaldo: abre https://maulegps.com/concurso/api.php?accion=csv&amp;clave=TU-CLAVE (se descarga un .csv) y elige ese archivo aquí.</p>
       <div class="fila-form"><input type="file" id="archivo-csv" accept=".csv,text/csv"></div>
     </div>
     <div data-contenido="ejemplo" hidden>
@@ -353,7 +353,7 @@ const CONFIG = {
   negocio: 'Maule GPS',
   instagram: 'maulegps',
   titulo: 'Sorteo instalación GPS gratis',
-  urlScript: '',          // opcional: la misma URL de index.html, así no hay que pegarla
+  urlScript: 'https://maulegps.com/concurso/api.php',   // 18-oct: el servidor de inscripciones (api.php en VPS2), ya queda puesto
   ganadores: 1,
   suplentes: 2,
   // Mensaje para escribirle al ganador. {nombre} se reemplaza por su primer nombre.
@@ -449,7 +449,7 @@ function mostrarCarga(texto, error) {
 async function cargarDesdeSheets() {
   const url = $('url-script').value.trim();
   const clave = $('clave').value;
-  if (!/^https:\/\/script\.google(usercontent)?\.com\//.test(url)) { mostrarCarga('Pega la URL de Google Apps Script (empieza con https://script.google.com/).', true); return; }
+  if (!/^https:\/\/[^\s?#]+\/api\.php$/.test(url)) { mostrarCarga('Pega la dirección del servidor de inscripciones (termina en api.php).', true); return; }
   if (!clave) { mostrarCarga('Escribe la clave de la tómbola.', true); return; }
   guardarPref('url', url);
   const boton = $('btn-cargar-sheets');
@@ -459,9 +459,9 @@ async function cargarDesdeSheets() {
     const res = await fetch(url + (url.includes('?') ? '&' : '?') + 'accion=participantes&clave=' + encodeURIComponent(clave));
     const r = await res.json();
     if (!r.ok) throw new Error(r.error || 'Error');
-    cargarLista(r.participantes || [], 'Google Sheets', false);
+    cargarLista(r.participantes || [], 'servidor maulegps.com', false);
   } catch (e) {
-    mostrarCarga('No se pudo cargar: ' + (e.message === 'Clave incorrecta' ? 'la clave no coincide con CLAVE_ADMIN del script.' : 'revisa la URL y tu conexión.'), true);
+    mostrarCarga('No se pudo cargar: ' + (e.message === 'Clave incorrecta' ? 'la clave no coincide con la del servidor.' : 'revisa la URL y tu conexión.'), true);
   } finally {
     boton.disabled = false;
   }

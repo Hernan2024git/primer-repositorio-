@@ -376,7 +376,7 @@
 </head>
 <body>
 
-<div id="banner-prueba" class="banner-prueba" hidden>MODO PRUEBA · Falta conectar Google Sheets: las inscripciones no se están guardando.</div>
+<div id="banner-prueba" class="banner-prueba" hidden>MODO PRUEBA · Falta conectar el servidor: las inscripciones no se están guardando.</div>
 
 <header class="hero">
   <div class="hero-interior">
@@ -521,9 +521,9 @@ const CONFIG = {
   whatsapp: '56978038759',            // sin + ni espacios
   instagram: 'maulegps',              // tu usuario de Instagram, sin @
 
-  // Pega aquí la URL de tu Google Apps Script (termina en /exec).
-  // Si queda vacío, la página funciona en MODO PRUEBA y no guarda nada.
-  urlScript: '',
+  // 18-oct-2026: las inscripciones se guardan en NUESTRO servidor (api.php en el mismo maulegps.com, VPS2),
+  // ya no en Google. Si queda vacío, la página funciona en MODO PRUEBA y no guarda nada.
+  urlScript: '/concurso/api.php',
 
   cierre: '2026-10-19T18:00:00-03:00', // fin de inscripciones (hora de Chile)
   sorteo: '2026-10-19T20:00:00-03:00', // fecha y hora del sorteo en vivo
