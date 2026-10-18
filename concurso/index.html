@@ -711,20 +711,34 @@ async function enviar(datos) {
     await new Promise((r) => setTimeout(r, 700));
     return { ok: true, numero: Math.floor(Math.random() * 200) + 1, prueba: true };
   }
-  const control = new AbortController();
-  const tiempo = setTimeout(() => control.abort(), 20000);
-  try {
-    // text/plain evita el "preflight" CORS que Google Apps Script no responde
-    const res = await fetch(CONFIG.urlScript, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(datos),
-      signal: control.signal,
-    });
-    return await res.json();
-  } finally {
-    clearTimeout(tiempo);
+  // 18-oct-2026: en celular la primera petición a veces se pierde (red móvil que cambia de antena o radio dormida):
+  // Hernán lo vio en un Android y el servidor nunca recibió ese POST. Se reintenta solo hasta 3 veces antes de
+  // mostrar el error. Es seguro repetir: el servidor no duplica usuarios (devuelve "duplicado" y se trata como ok).
+  const INTENTOS = 3;
+  let ultimoError = null;
+  for (let intento = 1; intento <= INTENTOS; intento++) {
+    if (intento > 1) $('btn-enviar').innerHTML = '<span class="girando"></span>Reintentando…';
+    const control = new AbortController();
+    const tiempo = setTimeout(() => control.abort(), 15000);
+    try {
+      // text/plain evita el "preflight" CORS (se mantiene por si la página se sirve desde otro dominio)
+      const res = await fetch(CONFIG.urlScript, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(datos),
+        signal: control.signal,
+        cache: 'no-store',
+      });
+      if (res.status >= 500) throw new Error('servidor ' + res.status);   // 5xx: vale la pena reintentar
+      return await res.json();                                             // 2xx / 4xx: respuesta definitiva
+    } catch (e) {
+      ultimoError = e;
+      if (intento < INTENTOS) await new Promise((r) => setTimeout(r, 1200 * intento));
+    } finally {
+      clearTimeout(tiempo);
+    }
   }
+  throw ultimoError;
 }
 
 $('formulario').addEventListener('submit', async (ev) => {
