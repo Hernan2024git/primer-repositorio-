@@ -1,0 +1,6 @@
+{
+  "name": "concurso-maule-gps",
+  "private": true,
+  "type": "commonjs",
+  "description": "Marca la carpeta como CommonJS para que herramientas/afiche/construir.js (require) no herede el type=module de una carpeta superior"
+}

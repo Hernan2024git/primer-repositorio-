@@ -20,7 +20,7 @@ const CONFIG = {
   urlConcurso: 'https://TU-SITIO.cl/concurso/',  // ← dirección pública de la página del concurso, con https:// (sin /admin/)
   precio: '$3.990',
   etiquetaPrecio: 'PLAN MENSUAL',
-  sorteo: '2026-10-18T20:00:00-03:00',           // se muestra como "domingo 18 de octubre"
+  sorteo: '2026-10-19T20:00:00-03:00',           // se muestra como "lunes 19 de octubre"
   titular: ['ENCUÉNTRALO,', 'APÁGALO', 'Y *RECUPÉRALO*.'],  // una línea por elemento; *así* sale en rojo
   bajada: 'Rastreo GPS para tu auto, *desde tu celular*.',
   caracteristicas: ['Apagado remoto', 'Ubicación en tiempo real', 'Alerta de movimiento', 'Historial de recorridos'],
@@ -472,7 +472,7 @@ const CONFIG = {
                 <li><span class="n" data-campo="paso-2-n">2</span><span data-campo="paso-2">Sigue a <span class="ig"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6"/></svg><span data-campo="instagram">@maulegps</span></span> en Instagram</span></li>
                 <li><span class="n" data-campo="paso-3-n">3</span><span data-campo="paso-3">Etiquétanos en una historia</span></li>
               </ol>
-              <div class="fecha"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span data-campo="fecha-sorteo"><span class="tenue">Sorteo en vivo ·</span> domingo 18 de octubre</span></div>
+              <div class="fecha"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span data-campo="fecha-sorteo"><span class="tenue">Sorteo en vivo ·</span> lunes 19 de octubre</span></div>
             </div>
             <div class="talon">
               <div class="leyenda"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-icono-leyenda><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M10 18h4"/></svg><span data-campo="qr-leyenda">ESCANEA PARA PARTICIPAR</span></div>
@@ -2882,7 +2882,7 @@ function pintarTextos() {
   (CONFIG.pasos || []).forEach((t, i) => pintarPaso(i, t));
   poner('qr-leyenda', escapar(CONFIG.leyendaQR || 'ESCANEA PARA PARTICIPAR'));
   const f = fechaSorteo();
-  if (!f) mostrarEstado('Revisa «sorteo» en CONFIGURACIÓN: la fecha no es válida (formato 2026-10-18T20:00:00-03:00).', true);
+  if (!f) mostrarEstado('Revisa «sorteo» en CONFIGURACIÓN: la fecha no es válida (formato 2026-10-19T20:00:00-03:00).', true);
   poner('fecha-sorteo', f ? '<span class="tenue">Sorteo en vivo ·</span> ' + escapar(f) : '<span class="tenue">Sorteo en vivo por Instagram</span>');
   poner('telefono', escapar(telefonoLegible()));
   $('ig-panel').textContent = String(CONFIG.instagram || '').replace(/^@/, '');

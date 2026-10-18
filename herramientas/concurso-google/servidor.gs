@@ -16,7 +16,7 @@
 
 const CLAVE_ADMIN = '@@CLAVE@@';                         // clave para cargar la lista en la tómbola
 const ID_PLANILLA = '@@ID_PLANILLA@@';                   // vacío = la planilla donde pegaste este código
-const CIERRE = new Date('2026-10-18T18:00:00-03:00');    // fin de inscripciones (igual que en la página)
+const CIERRE = new Date('2026-10-19T18:00:00-03:00');    // fin de inscripciones (igual que en la página)
 const URL_PAGINA = '@@URL_PAGINA@@';
 const NOMBRE_HOJA = 'Participantes';
 const ENCABEZADOS = ['N°', 'Fecha', 'Instagram', 'Origen'];

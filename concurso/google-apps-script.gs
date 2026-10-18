@@ -16,7 +16,7 @@
 
 const CLAVE_ADMIN = 'CAMBIA-ESTA-CLAVE';                         // clave para cargar la lista en la tómbola
 const ID_PLANILLA = '';                   // vacío = la planilla donde pegaste este código
-const CIERRE = new Date('2026-10-18T18:00:00-03:00');    // fin de inscripciones (igual que en la página)
+const CIERRE = new Date('2026-10-19T18:00:00-03:00');    // fin de inscripciones (igual que en la página)
 const URL_PAGINA = 'https://raw.githubusercontent.com/Hernan2024git/primer-repositorio-/refs/heads/claude/affectionate-noether-0ce4z1/concurso/pagina-google.html';
 const NOMBRE_HOJA = 'Participantes';
 const ENCABEZADOS = ['N°', 'Fecha', 'Instagram', 'Origen'];
